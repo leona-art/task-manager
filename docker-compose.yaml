@@ -1,0 +1,28 @@
+version: '3.9'
+services:
+  app:
+    image: golang:1.24
+    volumes:
+      - .:/go/src/app
+    working_dir: /go/src/app
+    command: go run main.go
+    ports:
+      - "8080:8080"
+    environment:
+      - GO_ENV=development
+  mysql:
+    image: mysql:8.0
+    container_name: go_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: app_db
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
+    driver: local
