@@ -87,15 +87,9 @@ func TestStatus(t *testing.T) {
 
 func TestTask(t *testing.T) {
 	t.Run("New task", func(t *testing.T) {
-		task := NewTask("1", "Test Task", "This is a test task")
-		if task.ID != "1" {
-			t.Errorf("Expected task ID to be '1', got '%s'", task.ID)
-		}
-		if task.Title != "Test Task" {
-			t.Errorf("Expected task title to be 'Test Task', got '%s'", task.Title)
-		}
-		if task.Description != "This is a test task" {
-			t.Errorf("Expected task description to be 'This is a test task', got '%s'", task.Description)
+		task, err := NewTask("Test Task", "This is a test task")
+		if err != nil {
+			t.Errorf("Expected no error, got '%v'", err)
 		}
 		if task.State.Status() != Pending {
 			t.Errorf("Expected task status to be '%s', got '%s'", Pending, task.State.Status())
@@ -103,8 +97,11 @@ func TestTask(t *testing.T) {
 	})
 
 	t.Run("Start task", func(t *testing.T) {
-		task := NewTask("1", "Test Task", "This is a test task")
-		err := task.Start()
+		task, err := NewTask("Test Task", "This is a test task")
+		if err != nil {
+			t.Errorf("Expected no error, got '%v'", err)
+		}
+		err = task.Start()
 		if err != nil {
 			t.Errorf("Expected no error, got '%v'", err)
 		}

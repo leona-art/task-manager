@@ -10,7 +10,10 @@ func TestNewTaskInfo(t *testing.T) {
 	title := "Test Task"
 	description := "This is a test task description."
 
-	taskInfo := NewTaskInfo(title, description)
+	taskInfo, err := NewTaskInfo(title, description)
+	if err != nil {
+		t.Fatalf("failed to create new task info: %v", err)
+	}
 
 	if taskInfo.Title != title {
 		t.Errorf("expected title %s, got %s", title, taskInfo.Title)
@@ -24,7 +27,7 @@ func TestNewTaskInfo(t *testing.T) {
 	if taskInfo.CreatedAt.IsZero() {
 		t.Error("expected CreatedAt to be set, but it was zero")
 	}
-	_, err := uuid.Parse(taskInfo.ID)
+	_, err = uuid.Parse(taskInfo.ID)
 	if err != nil {
 		t.Errorf("failed to parse UUID: %v", err)
 	}

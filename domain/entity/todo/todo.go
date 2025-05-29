@@ -1,28 +1,28 @@
 package todo
 
+import "github.com/leona-art/task-manager/domain/entity/task_info"
+
 type Todo struct {
-	ID          string
-	Title       string
-	Description string
-	State       TodoState
+	Info  task_info.TaskInfo
+	State TodoState
 }
 
-func NewTodo(id, title, description string) Todo {
-	return Todo{
-		ID:          id,
-		Title:       title,
-		Description: description,
-		State:       NewTodoPendingState(),
+func NewTodo(title, description string) (Todo, error) {
+	info, err := task_info.NewTaskInfo(title, description)
+	if err != nil {
+		return Todo{}, err
 	}
+	return Todo{
+		Info:  info,
+		State: NewTodoPendingState(),
+	}, nil
 }
 func (t *Todo) SwitchState() {
 	t.State = t.State.Switch()
 }
 
 func (t *Todo) Equal(other Todo) bool {
-	return t.ID == other.ID &&
-		t.Title == other.Title &&
-		t.Description == other.Description &&
+	return t.Info.Equal(other.Info) &&
 		t.State.Status() == other.State.Status()
 }
 

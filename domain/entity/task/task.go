@@ -1,21 +1,25 @@
 package task
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/leona-art/task-manager/domain/entity/task_info"
+)
 
 type Task struct {
-	ID          string
-	Title       string
-	Description string
-	State       TaskState
+	Info  task_info.TaskInfo
+	State TaskState
 }
 
-func NewTask(id, title, description string) Task {
-	return Task{
-		ID:          id,
-		Title:       title,
-		Description: description,
-		State:       NewTaskPendingState(),
+func NewTask(title, description string) (Task, error) {
+	info, err := task_info.NewTaskInfo(title, description)
+	if err != nil {
+		return Task{}, err
 	}
+	return Task{
+		Info:  info,
+		State: NewTaskPendingState(),
+	}, nil
 }
 
 func (t *Task) Start() error {
@@ -49,8 +53,6 @@ func (t *Task) Complete(resolution string) error {
 }
 
 func (t *Task) Equal(other Task) bool {
-	return t.ID == other.ID &&
-		t.Title == other.Title &&
-		t.Description == other.Description &&
+	return t.Info.Equal(other.Info) &&
 		t.State.Status() == other.State.Status()
 }

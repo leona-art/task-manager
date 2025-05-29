@@ -1,21 +1,25 @@
 package issue
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/leona-art/task-manager/domain/entity/task_info"
+)
 
 type Issue struct {
-	ID          string
-	Title       string
-	Description string
-	Status      IssueState
+	Info   task_info.TaskInfo
+	Status IssueState
 }
 
-func NewIssue(id, title, description string) Issue {
-	return Issue{
-		ID:          id,
-		Title:       title,
-		Description: description,
-		Status:      NewIssuePendingState(),
+func NewIssue(title, description string) (Issue, error) {
+	info, err := task_info.NewTaskInfo(title, description)
+	if err != nil {
+		return Issue{}, fmt.Errorf("failed to generate UUID: %w", err)
 	}
+	return Issue{
+		Info:   info,
+		Status: NewIssuePendingState(),
+	}, nil
 }
 func (i *Issue) StartResearching() error {
 	candidate := i.Status.Candidate()
