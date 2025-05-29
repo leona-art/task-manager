@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package workspace.v1;
+
+option go_package = "github.com/leona-art/task-manager/gen/workspace/v1;workspacev1";
+
+import "google/protobuf/timestamp.proto";
+
+enum TodoStatus {
+  TODO_STATUS_UNSPECIFIED = 0; // Default value, should not be used.
+  TODO_STATUS_PENDING = 1;    // Task is pending.
+  TODO_STATUS_DONE = 2;  // Task is completed.
+}
+
+
+message Todo {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  TodoStatus status = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+message CreateTodoRequest {
+  string title = 1;
+  string description = 2;
+}
+message CreateTodoResponse {
+  Todo todo = 1;
+}
+
+message GetTodoRequest {
+  string id = 1;
+}
+message GetTodoResponse {
+  Todo todo = 1;
+}
+
+message ListTodosRequest {}
+
+message ListTodosResponse {
+  repeated Todo todos = 1;
+}
+
+message DoTodoRequest {
+  string id = 1;
+}
+message DoTodoResponse {
+  Todo todo = 1;
+}
+message UndoneTodoRequest {
+  string id = 1;
+}
+message UndoneTodoResponse {
+  Todo todo = 1;
+}

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package workspace.v1;
+
+option go_package = "github.com/leona-art/task-manager/gen/workspace/v1;workspacev1";
+
+import "workspace/v1/todo.proto";
+
+service WorkspaceService {
+    rpc CreateTodo (CreateTodoRequest) returns (CreateTodoResponse);
+    rpc GetTodo (GetTodoRequest) returns (GetTodoResponse);
+    rpc ListTodos (ListTodosRequest) returns (ListTodosResponse);
+    rpc DoTodo (DoTodoRequest) returns (DoTodoResponse);
+    rpc UndoneTodo (UndoneTodoRequest) returns (UndoneTodoResponse);
+}
