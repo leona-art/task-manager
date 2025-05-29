@@ -2,7 +2,7 @@ package issue
 
 type IssuePendingStatus struct{}
 
-func (s IssuePendingStatus) Status() string {
+func (s IssuePendingStatus) Status() IssueStatus {
 	return Pending
 }
 
@@ -12,13 +12,13 @@ func (s IssuePendingStatus) Cause() (value string, ok bool) {
 func (s IssuePendingStatus) Resolution() (value string, ok bool) {
 	return "", false
 }
-func (s IssuePendingStatus) Candidate() map[string]func() IssueStatus {
-	return map[string]func() IssueStatus{
-		Researching: func() IssueStatus {
-			return NewIssueResearchingStatus()
+func (s IssuePendingStatus) Candidate() TransitionMap {
+	return TransitionMap{
+		Researching: func() IssueState {
+			return NewIssueResearchingState()
 		},
 	}
 }
-func NewIssuePendingStatus() IssuePendingStatus {
+func NewIssuePendingState() IssuePendingStatus {
 	return IssuePendingStatus{}
 }

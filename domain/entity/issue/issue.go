@@ -6,7 +6,7 @@ type Issue struct {
 	ID          string
 	Title       string
 	Description string
-	Status      IssueStatus
+	Status      IssueState
 }
 
 func NewIssue(id, title, description string) Issue {
@@ -14,7 +14,7 @@ func NewIssue(id, title, description string) Issue {
 		ID:          id,
 		Title:       title,
 		Description: description,
-		Status:      NewIssuePendingStatus(),
+		Status:      NewIssuePendingState(),
 	}
 }
 func (i *Issue) OpenResearch() error {

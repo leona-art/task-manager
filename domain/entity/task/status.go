@@ -1,13 +1,9 @@
 package task
 
-type TaskStatus interface {
-	Status() string
-	Resolution() (value string, ok bool)
-	Candidate() map[string]func() TaskStatus
-}
+type TaskStatus string
 
 const (
-	Pending    = "pending"
-	InProgress = "in progress"
-	Completed  = "completed"
+	Pending    TaskStatus = "pending"
+	InProgress TaskStatus = "in progress"
+	Completed  TaskStatus = "completed"
 )

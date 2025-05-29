@@ -4,7 +4,7 @@ import "testing"
 
 func TestStatus(t *testing.T) {
 	t.Run("New Pending Status", func(t *testing.T) {
-		status := NewTaskPendingStatus()
+		status := NewTaskPendingState()
 		if status.Status() != Pending {
 			t.Errorf("Expected status to be '%s', got '%s'", Pending, status.Status())
 		}
@@ -14,7 +14,7 @@ func TestStatus(t *testing.T) {
 	})
 
 	t.Run("New InProgress Status", func(t *testing.T) {
-		status := NewTaskInProgressStatus()
+		status := NewTaskInProgressState()
 		if status.Status() != InProgress {
 			t.Errorf("Expected status to be '%s', got '%s'", InProgress, status.Status())
 		}
@@ -25,7 +25,7 @@ func TestStatus(t *testing.T) {
 
 	t.Run("New InProgress Status with Resolution", func(t *testing.T) {
 		resolution := "Task is being worked on"
-		status := NewTaskInProgressStatusWithResolution(resolution)
+		status := NewTaskInProgressStateWithResolution(resolution)
 		if status.Status() != InProgress {
 			t.Errorf("Expected status to be '%s', got '%s'", InProgress, status.Status())
 		}
@@ -36,7 +36,7 @@ func TestStatus(t *testing.T) {
 
 	t.Run("New Completed Status", func(t *testing.T) {
 		resolution := "Task completed successfully"
-		status := NewTaskCompletedStatus(resolution)
+		status := NewTaskCompletedState(resolution)
 		if status.Status() != Completed {
 			t.Errorf("Expected status to be '%s', got '%s'", Completed, status.Status())
 		}
@@ -46,7 +46,7 @@ func TestStatus(t *testing.T) {
 	})
 
 	t.Run("Pending To InProgress Transition", func(t *testing.T) {
-		pendingStatus := NewTaskPendingStatus()
+		pendingStatus := NewTaskPendingState()
 		candidate := pendingStatus.Candidate()
 		if progress, ok := candidate[InProgress]; ok {
 			inProgressStatus := progress()
@@ -62,7 +62,7 @@ func TestStatus(t *testing.T) {
 	})
 
 	t.Run("InProgress To Completed Transition", func(t *testing.T) {
-		inProgressStatus := NewTaskInProgressStatusWithResolution("Task is being worked on")
+		inProgressStatus := NewTaskInProgressStateWithResolution("Task is being worked on")
 		candidate := inProgressStatus.Candidate()
 		if complete, ok := candidate[Completed]; ok {
 			completedStatus := complete()
@@ -78,7 +78,7 @@ func TestStatus(t *testing.T) {
 	})
 
 	t.Run("Failed Transition Not resolution", func(t *testing.T) {
-		inProgressStatus := NewTaskInProgressStatus()
+		inProgressStatus := NewTaskInProgressState()
 		if _, ok := inProgressStatus.Candidate()[Completed]; ok {
 			t.Error("Expected no Completed candidate status for in-progress without resolution")
 		}
@@ -97,8 +97,8 @@ func TestTask(t *testing.T) {
 		if task.Description != "This is a test task" {
 			t.Errorf("Expected task description to be 'This is a test task', got '%s'", task.Description)
 		}
-		if task.Status.Status() != Pending {
-			t.Errorf("Expected task status to be '%s', got '%s'", Pending, task.Status.Status())
+		if task.State.Status() != Pending {
+			t.Errorf("Expected task status to be '%s', got '%s'", Pending, task.State.Status())
 		}
 	})
 
@@ -108,8 +108,8 @@ func TestTask(t *testing.T) {
 		if err != nil {
 			t.Errorf("Expected no error, got '%v'", err)
 		}
-		if task.Status.Status() != InProgress {
-			t.Errorf("Expected task status to be '%s', got '%s'", InProgress, task.Status.Status())
+		if task.State.Status() != InProgress {
+			t.Errorf("Expected task status to be '%s', got '%s'", InProgress, task.State.Status())
 		}
 	})
 

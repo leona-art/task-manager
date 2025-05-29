@@ -6,7 +6,7 @@ type Task struct {
 	ID          string
 	Title       string
 	Description string
-	Status      TaskStatus
+	State       TaskState
 }
 
 func NewTask(id, title, description string) Task {
@@ -14,14 +14,14 @@ func NewTask(id, title, description string) Task {
 		ID:          id,
 		Title:       title,
 		Description: description,
-		Status:      NewTaskPendingStatus(),
+		State:       NewTaskPendingState(),
 	}
 }
 
 func (t *Task) Open() error {
-	candidate := t.Status.Candidate()
+	candidate := t.State.Candidate()
 	if progress, ok := candidate[InProgress]; ok {
-		t.Status = progress()
+		t.State = progress()
 	} else {
 		return fmt.Errorf("cannot open task: no candidate status found")
 	}
@@ -29,9 +29,9 @@ func (t *Task) Open() error {
 }
 
 func (t *Task) SetResolution(resolution string) error {
-	switch t.Status.Status() {
+	switch t.State.Status() {
 	case InProgress:
-		t.Status = NewTaskInProgressStatusWithResolution(resolution)
+		t.State = NewTaskInProgressStateWithResolution(resolution)
 	default:
 		return fmt.Errorf("cannot set resolution: task is not in progress")
 	}
@@ -39,9 +39,9 @@ func (t *Task) SetResolution(resolution string) error {
 }
 
 func (t *Task) Complete(resolution string) error {
-	candidate := t.Status.Candidate()
+	candidate := t.State.Candidate()
 	if complete, ok := candidate[Completed]; ok {
-		t.Status = complete()
+		t.State = complete()
 	} else {
 		return fmt.Errorf("cannot complete task: no candidate status found")
 	}
@@ -52,5 +52,5 @@ func (t *Task) Equal(other Task) bool {
 	return t.ID == other.ID &&
 		t.Title == other.Title &&
 		t.Description == other.Description &&
-		t.Status.Status() == other.Status.Status()
+		t.State.Status() == other.State.Status()
 }

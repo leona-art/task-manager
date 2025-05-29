@@ -5,7 +5,7 @@ type IssueResolvedStatus struct {
 	cause      string
 }
 
-func (s IssueResolvedStatus) Status() string {
+func (s IssueResolvedStatus) Status() IssueStatus {
 	return Resolved
 }
 
@@ -15,17 +15,17 @@ func (s IssueResolvedStatus) Cause() (value string, ok bool) {
 func (s IssueResolvedStatus) Resolution() (value string, ok bool) {
 	return s.resolution, true
 }
-func (s IssueResolvedStatus) Candidate() map[string]func() IssueStatus {
-	return map[string]func() IssueStatus{
-		Researching: func() IssueStatus {
-			return NewIssueResearchingStatusWithCause(s.cause)
+func (s IssueResolvedStatus) Candidate() TransitionMap {
+	return TransitionMap{
+		Researching: func() IssueState {
+			return NewIssueResearchingStateWithCause(s.cause)
 		},
-		Resolving: func() IssueStatus {
-			return NewIssueResolvingStatusWithResolution(s.cause, s.resolution)
+		Resolving: func() IssueState {
+			return NewIssueResolvingStateWithResolution(s.cause, s.resolution)
 		},
 	}
 }
-func NewIssueResolvedStatus(cause, resolution string) IssueResolvedStatus {
+func NewIssueResolvedState(cause, resolution string) IssueResolvedStatus {
 	return IssueResolvedStatus{
 		cause:      cause,
 		resolution: resolution,

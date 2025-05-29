@@ -2,21 +2,21 @@ package task
 
 type TaskPendingStatus struct{}
 
-func (s TaskPendingStatus) Status() string {
+func (s TaskPendingStatus) Status() TaskStatus {
 	return Pending
 }
 
 func (s TaskPendingStatus) Resolution() (value string, ok bool) {
 	return "", false
 }
-func (s TaskPendingStatus) Candidate() map[string]func() TaskStatus {
-	return map[string]func() TaskStatus{
-		InProgress: func() TaskStatus {
-			return NewTaskInProgressStatus()
+func (s TaskPendingStatus) Candidate() TransitionMap {
+	return TransitionMap{
+		InProgress: func() TaskState {
+			return NewTaskInProgressState()
 		},
 	}
 }
 
-func NewTaskPendingStatus() TaskPendingStatus {
+func NewTaskPendingState() TaskPendingStatus {
 	return TaskPendingStatus{}
 }

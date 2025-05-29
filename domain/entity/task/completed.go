@@ -4,7 +4,7 @@ type TaskCompletedStatus struct {
 	resolution string
 }
 
-func (s TaskCompletedStatus) Status() string {
+func (s TaskCompletedStatus) Status() TaskStatus {
 	return Completed
 }
 
@@ -12,15 +12,15 @@ func (s TaskCompletedStatus) Resolution() (value string, ok bool) {
 	return s.resolution, true
 }
 
-func (s TaskCompletedStatus) Candidate() map[string]func() TaskStatus {
-	return map[string]func() TaskStatus{
-		InProgress: func() TaskStatus {
-			return NewTaskInProgressStatusWithResolution(s.resolution)
+func (s TaskCompletedStatus) Candidate() TransitionMap {
+	return TransitionMap{
+		InProgress: func() TaskState {
+			return NewTaskInProgressStateWithResolution(s.resolution)
 		},
 	}
 }
 
-func NewTaskCompletedStatus(resolution string) TaskCompletedStatus {
+func NewTaskCompletedState(resolution string) TaskCompletedStatus {
 	return TaskCompletedStatus{
 		resolution: resolution,
 	}

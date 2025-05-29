@@ -1,15 +1,10 @@
 package issue
 
-type IssueStatus interface {
-	Status() string
-	Cause() (value string, ok bool)
-	Resolution() (value string, ok bool)
-	Candidate() map[string]func() IssueStatus
-}
+type IssueStatus string
 
 const (
-	Pending     = "pending"
-	Researching = "researching"
-	Resolving   = "resolving"
-	Resolved    = "resolved"
+	Pending     IssueStatus = "pending"
+	Researching IssueStatus = "researching"
+	Resolving   IssueStatus = "resolving"
+	Resolved    IssueStatus = "resolved"
 )

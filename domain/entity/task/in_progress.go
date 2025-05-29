@@ -6,7 +6,7 @@ type TaskInProgressStatus struct {
 	resolution utils.Option[string]
 }
 
-func (s TaskInProgressStatus) Status() string {
+func (s TaskInProgressStatus) Status() TaskStatus {
 	return InProgress
 }
 
@@ -14,26 +14,23 @@ func (s TaskInProgressStatus) Resolution() (value string, ok bool) {
 	return s.resolution.Get()
 }
 
-func (s TaskInProgressStatus) Candidate() map[string]func() TaskStatus {
-	value, ok := s.resolution.Get()
-	if !ok {
-		return map[string]func() TaskStatus{}
+func (s TaskInProgressStatus) Candidate() TransitionMap {
+	var transitionMap = make(TransitionMap)
+	if value, ok := s.resolution.Get(); ok {
+		transitionMap[Completed] = func() TaskState {
+			return NewTaskCompletedState(value)
+		}
 	}
-
-	return map[string]func() TaskStatus{
-		Completed: func() TaskStatus {
-			return NewTaskCompletedStatus(value)
-		},
-	}
+	return transitionMap
 }
 
-func NewTaskInProgressStatus() TaskInProgressStatus {
+func NewTaskInProgressState() TaskInProgressStatus {
 	return TaskInProgressStatus{
 		resolution: utils.None[string](),
 	}
 }
 
-func NewTaskInProgressStatusWithResolution(resolution string) TaskInProgressStatus {
+func NewTaskInProgressStateWithResolution(resolution string) TaskInProgressStatus {
 	return TaskInProgressStatus{
 		resolution: utils.Some(resolution),
 	}

@@ -6,7 +6,7 @@ type IssueResearchingStatus struct {
 	cause utils.Option[string]
 }
 
-func (s IssueResearchingStatus) Status() string {
+func (s IssueResearchingStatus) Status() IssueStatus {
 	return Researching
 }
 func (s IssueResearchingStatus) Cause() (value string, ok bool) {
@@ -15,24 +15,22 @@ func (s IssueResearchingStatus) Cause() (value string, ok bool) {
 func (s IssueResearchingStatus) Resolution() (value string, ok bool) {
 	return "", false
 }
-func (s IssueResearchingStatus) Candidate() map[string]func() IssueStatus {
-	value, ok := s.cause.Get()
-	if !ok {
-		return map[string]func() IssueStatus{}
+func (s IssueResearchingStatus) Candidate() TransitionMap {
+	var transitionMap = make(TransitionMap)
+	if value, ok := s.cause.Get(); ok {
+		transitionMap[Resolving] = func() IssueState {
+			return NewIssueResolvingState(value)
+		}
 	}
-	return map[string]func() IssueStatus{
-		Resolving: func() IssueStatus {
-			return NewIssueResolvingStatus(value)
-		},
-	}
+	return transitionMap
 }
-func NewIssueResearchingStatus() IssueResearchingStatus {
+func NewIssueResearchingState() IssueResearchingStatus {
 	return IssueResearchingStatus{
 		cause: utils.None[string](),
 	}
 }
 
-func NewIssueResearchingStatusWithCause(cause string) IssueResearchingStatus {
+func NewIssueResearchingStateWithCause(cause string) IssueResearchingStatus {
 	return IssueResearchingStatus{
 		cause: utils.Some(cause),
 	}
