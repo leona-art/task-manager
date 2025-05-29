@@ -3,16 +3,16 @@ package task
 import (
 	"fmt"
 
-	"github.com/leona-art/task-manager/domain/entity/task_info"
+	"github.com/leona-art/task-manager/domain/entity/taskinfo"
 )
 
 type Task struct {
-	Info  task_info.TaskInfo
+	Info  taskinfo.TaskInfo
 	State TaskState
 }
 
 func NewTask(title, description string) (Task, error) {
-	info, err := task_info.NewTaskInfo(title, description)
+	info, err := taskinfo.NewTaskInfo(title, description)
 	if err != nil {
 		return Task{}, err
 	}

@@ -3,16 +3,16 @@ package issue
 import (
 	"fmt"
 
-	"github.com/leona-art/task-manager/domain/entity/task_info"
+	"github.com/leona-art/task-manager/domain/entity/taskinfo"
 )
 
 type Issue struct {
-	Info   task_info.TaskInfo
+	Info   taskinfo.TaskInfo
 	Status IssueState
 }
 
 func NewIssue(title, description string) (Issue, error) {
-	info, err := task_info.NewTaskInfo(title, description)
+	info, err := taskinfo.NewTaskInfo(title, description)
 	if err != nil {
 		return Issue{}, fmt.Errorf("failed to generate UUID: %w", err)
 	}

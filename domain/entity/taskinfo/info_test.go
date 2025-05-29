@@ -1,4 +1,4 @@
-package task_info
+package taskinfo
 
 import (
 	"testing"

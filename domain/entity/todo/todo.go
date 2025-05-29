@@ -1,14 +1,14 @@
 package todo
 
-import "github.com/leona-art/task-manager/domain/entity/task_info"
+import "github.com/leona-art/task-manager/domain/entity/taskinfo"
 
 type Todo struct {
-	Info  task_info.TaskInfo
+	Info  taskinfo.TaskInfo
 	State TodoState
 }
 
 func NewTodo(title, description string) (Todo, error) {
-	info, err := task_info.NewTaskInfo(title, description)
+	info, err := taskinfo.NewTaskInfo(title, description)
 	if err != nil {
 		return Todo{}, err
 	}
