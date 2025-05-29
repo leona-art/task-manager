@@ -4,7 +4,7 @@ type Todo struct {
 	ID          string
 	Title       string
 	Description string
-	Status      TodoStatus
+	State       TodoState
 }
 
 func NewTodo(id, title, description string) Todo {
@@ -12,9 +12,23 @@ func NewTodo(id, title, description string) Todo {
 		ID:          id,
 		Title:       title,
 		Description: description,
-		Status:      NewTodoPendingStatus(),
+		State:       NewTodoPendingState(),
 	}
 }
-func (t *Todo) SwitchStatus() {
-	t.Status = t.Status.Switch()
+func (t *Todo) SwitchState() {
+	t.State = t.State.Switch()
+}
+
+func (t *Todo) Equal(other Todo) bool {
+	return t.ID == other.ID &&
+		t.Title == other.Title &&
+		t.Description == other.Description &&
+		t.State.Status() == other.State.Status()
+}
+
+func (t *Todo) IsDone() bool {
+	return t.State.Status() == Done
+}
+func (t *Todo) IsPending() bool {
+	return t.State.Status() == Pending
 }

@@ -17,7 +17,7 @@ func NewIssue(id, title, description string) Issue {
 		Status:      NewIssuePendingState(),
 	}
 }
-func (i *Issue) OpenResearch() error {
+func (i *Issue) StartResearching() error {
 	candidate := i.Status.Candidate()
 	if progress, ok := candidate[Researching]; ok {
 		i.Status = progress()
@@ -27,7 +27,7 @@ func (i *Issue) OpenResearch() error {
 	return nil
 }
 
-func (i *Issue) OpenResolve() error {
+func (i *Issue) StartResolution() error {
 	candidate := i.Status.Candidate()
 	if resolve, ok := candidate[Resolving]; ok {
 		i.Status = resolve()

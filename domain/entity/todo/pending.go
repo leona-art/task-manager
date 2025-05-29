@@ -2,14 +2,14 @@ package todo
 
 type TodoPendingStatus struct{}
 
-func (s TodoPendingStatus) Status() string {
-	return "pending"
+func (s TodoPendingStatus) Status() TodoStatus {
+	return Pending
 }
 
-func (s TodoPendingStatus) Switch() TodoStatus {
-	return NewTodoDoneStatus()
+func (s TodoPendingStatus) Switch() TodoState {
+	return NewTodoDoneState()
 }
 
-func NewTodoPendingStatus() TodoPendingStatus {
+func NewTodoPendingState() TodoPendingStatus {
 	return TodoPendingStatus{}
 }

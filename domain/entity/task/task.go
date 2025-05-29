@@ -18,12 +18,12 @@ func NewTask(id, title, description string) Task {
 	}
 }
 
-func (t *Task) Open() error {
+func (t *Task) Start() error {
 	candidate := t.State.Candidate()
 	if progress, ok := candidate[InProgress]; ok {
 		t.State = progress()
 	} else {
-		return fmt.Errorf("cannot open task: no candidate status found")
+		return fmt.Errorf("cannot start task: no candidate status found")
 	}
 	return nil
 }

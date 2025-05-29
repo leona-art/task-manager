@@ -1,6 +1,8 @@
 package todo
 
-type TodoStatus interface {
-	Status() string
-	Switch() TodoStatus
-}
+type TodoStatus string
+
+const (
+	Pending TodoStatus = "pending"
+	Done    TodoStatus = "done"
+)

@@ -102,9 +102,9 @@ func TestTask(t *testing.T) {
 		}
 	})
 
-	t.Run("Open task", func(t *testing.T) {
+	t.Run("Start task", func(t *testing.T) {
 		task := NewTask("1", "Test Task", "This is a test task")
-		err := task.Open()
+		err := task.Start()
 		if err != nil {
 			t.Errorf("Expected no error, got '%v'", err)
 		}

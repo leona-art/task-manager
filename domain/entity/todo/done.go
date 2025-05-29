@@ -1,22 +1,14 @@
 package todo
 
-import "time"
+type TodoDoneStatus struct{}
 
-type TodoDoneStatus struct {
-	at time.Time
+func (s TodoDoneStatus) Status() TodoStatus {
+	return Done
+}
+func (s TodoDoneStatus) Switch() TodoState {
+	return NewTodoPendingState()
 }
 
-func (s TodoDoneStatus) Status() string {
-	return "done"
-}
-func (s TodoDoneStatus) Switch() TodoStatus {
-	return NewTodoPendingStatus()
-}
-
-func (s TodoDoneStatus) At() time.Time {
-	return s.at
-}
-
-func NewTodoDoneStatus() TodoDoneStatus {
-	return TodoDoneStatus{at: time.Now()}
+func NewTodoDoneState() TodoDoneStatus {
+	return TodoDoneStatus{}
 }
