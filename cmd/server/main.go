@@ -10,13 +10,14 @@ import (
 	"github.com/leona-art/task-manager/domain/entity/todo"
 	workspacev1 "github.com/leona-art/task-manager/gen/workspace/v1"
 	"github.com/leona-art/task-manager/gen/workspace/v1/workspacev1connect"
+	"github.com/leona-art/task-manager/infra/inmemory"
 	"github.com/leona-art/task-manager/usecase"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 )
 
 type WorkSpaceServer struct {
-	todoUsecase usecase.TodoUseCase
+	todoUsecase *usecase.TodoUseCase
 }
 
 // CreateTodo implements workspacev1connect.WorkspaceServiceHandler.
@@ -98,7 +99,11 @@ func (w *WorkSpaceServer) UndoneTodo(ctx context.Context, req *connect.Request[w
 }
 
 func main() {
-	workspace := &WorkSpaceServer{}
+	todoRepo := inmemory.NewInMemoryTodoRepository()
+	todoUsecase := usecase.NewTodoUseCase(todoRepo)
+	workspace := &WorkSpaceServer{
+		todoUsecase: todoUsecase,
+	}
 	mux := http.NewServeMux()
 	path, handler := workspacev1connect.NewWorkspaceServiceHandler(workspace)
 	mux.Handle(path, handler)
