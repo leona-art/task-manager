@@ -1,32 +1,23 @@
 package taskinfo
 
 import (
-	"fmt"
 	"time"
-
-	"github.com/google/uuid"
 )
 
 type TaskInfo struct {
-	ID          string
 	Title       string
 	Description string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }
 
-func NewTaskInfo(title, description string) (TaskInfo, error) {
-	id, err := uuid.NewV7()
-	if err != nil {
-		return TaskInfo{}, fmt.Errorf("failed to generate UUID: %w", err)
-	}
+func NewTaskInfo(title, description string) TaskInfo {
 	return TaskInfo{
-		ID:          id.String(),
 		Title:       title,
 		Description: description,
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
-	}, nil
+	}
 }
 
 func (t *TaskInfo) Set(title, description string) {
@@ -40,14 +31,13 @@ func (t *TaskInfo) Update() {
 }
 
 func (t *TaskInfo) Equal(other TaskInfo) bool {
-	return t.ID == other.ID &&
-		t.Title == other.Title &&
+	return t.Title == other.Title &&
 		t.Description == other.Description &&
 		t.CreatedAt.Equal(other.CreatedAt) &&
 		t.UpdatedAt.Equal(other.UpdatedAt)
 }
 
 func (t *TaskInfo) IsEmpty() bool {
-	return t.ID == "" && t.Title == "" && t.Description == "" &&
+	return t.Title == "" && t.Description == "" &&
 		t.CreatedAt.IsZero() && t.UpdatedAt.IsZero()
 }

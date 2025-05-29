@@ -7,17 +7,19 @@ import (
 )
 
 type Task struct {
+	ID    TaskId
 	Info  taskinfo.TaskInfo
 	State TaskState
 }
 
 func NewTask(title, description string) (Task, error) {
-	info, err := taskinfo.NewTaskInfo(title, description)
+	id, err := NewTaskId()
 	if err != nil {
 		return Task{}, err
 	}
 	return Task{
-		Info:  info,
+		ID:    id,
+		Info:  taskinfo.NewTaskInfo(title, description),
 		State: NewTaskPendingState(),
 	}, nil
 }

@@ -7,17 +7,19 @@ import (
 )
 
 type Issue struct {
+	ID     IssueId
 	Info   taskinfo.TaskInfo
 	Status IssueState
 }
 
 func NewIssue(title, description string) (Issue, error) {
-	info, err := taskinfo.NewTaskInfo(title, description)
+	id, err := NewIssueId()
 	if err != nil {
-		return Issue{}, fmt.Errorf("failed to generate UUID: %w", err)
+		return Issue{}, err
 	}
 	return Issue{
-		Info:   info,
+		ID:     id,
+		Info:   taskinfo.NewTaskInfo(title, description),
 		Status: NewIssuePendingState(),
 	}, nil
 }
