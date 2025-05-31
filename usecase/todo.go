@@ -3,6 +3,7 @@ package usecase
 import (
 	"fmt"
 
+	"github.com/leona-art/task-manager/domain/entity/task"
 	"github.com/leona-art/task-manager/domain/entity/todo"
 )
 
@@ -16,36 +17,38 @@ func NewTodoUseCase(repository todo.TodoRepository) *TodoUseCase {
 	}
 }
 
-func (uc *TodoUseCase) CreateTodo(title, description string) (todo.Todo, error) {
-	t, err := todo.NewTodo(title, description)
+func (uc *TodoUseCase) CreateTodo(title, description string) (todo.TodoTask, error) {
+	info, err := task.NewBaseTask(title, description)
 	if err != nil {
-		return todo.Todo{}, err
+		return todo.TodoTask{}, err
 	}
-	if err := uc.repository.Save(t); err != nil {
-		return todo.Todo{}, err
+	todoTask := todo.NewTodoTask(info)
+
+	if err := uc.repository.Save(todoTask); err != nil {
+		return todo.TodoTask{}, err
 	}
-	return t, nil
+	return todoTask, nil
 }
 
-func (uc *TodoUseCase) GetTodoByID(id todo.TodoId) (todo.Todo, bool, error) {
-	t, ok, err := uc.repository.GetByID(id)
+func (uc *TodoUseCase) GetTodoByID(id task.TaskId) (todo.TodoTask, bool, error) {
+	t, ok, err := uc.repository.Get(id)
 	if err != nil {
-		return todo.Todo{}, false, err
+		return todo.TodoTask{}, false, err
 	}
 	if !ok {
-		return todo.Todo{}, false, nil
+		return todo.TodoTask{}, false, nil
 	}
 	return t, true, nil
 }
 
-func (uc *TodoUseCase) UpdateTodo(t todo.Todo) error {
-	if err := uc.repository.Update(t); err != nil {
+func (uc *TodoUseCase) UpdateTodo(t todo.TodoTask) error {
+	if err := uc.repository.Save(t); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (uc *TodoUseCase) DeleteTodo(id todo.TodoId) (bool, error) {
+func (uc *TodoUseCase) DeleteTodo(id task.TaskId) (bool, error) {
 	ok, err := uc.repository.Delete(id)
 	if err != nil {
 		return false, err
@@ -53,7 +56,7 @@ func (uc *TodoUseCase) DeleteTodo(id todo.TodoId) (bool, error) {
 	return ok, nil
 }
 
-func (uc *TodoUseCase) ListTodos() ([]todo.Todo, error) {
+func (uc *TodoUseCase) ListTodos() ([]todo.TodoTask, error) {
 	todos, err := uc.repository.List()
 	if err != nil {
 		return nil, err
@@ -61,38 +64,30 @@ func (uc *TodoUseCase) ListTodos() ([]todo.Todo, error) {
 	return todos, nil
 }
 
-func (uc *TodoUseCase) DoTodo(id todo.TodoId) (todo.Todo, error) {
+func (uc *TodoUseCase) DoTodo(id task.TaskId) (todo.TodoTask, error) {
 	t, ok, err := uc.GetTodoByID(id)
 	if err != nil {
-		return todo.Todo{}, err
+		return todo.TodoTask{}, err
 	}
 	if !ok {
-		return todo.Todo{}, fmt.Errorf("todo with id %s not found", id)
+		return todo.TodoTask{}, fmt.Errorf("todo with id %s not found", id)
 	}
-	if t.IsDone() {
-		return todo.Todo{}, fmt.Errorf("todo with id %s is already done", id)
-	}
-	t.SwitchState()
-	if err := uc.UpdateTodo(t); err != nil {
-		return todo.Todo{}, err
+	if err := t.Do(); err != nil {
+		return todo.TodoTask{}, err
 	}
 	return t, nil
 }
 
-func (uc *TodoUseCase) UndoTodo(id todo.TodoId) (todo.Todo, error) {
+func (uc *TodoUseCase) UndoTodo(id task.TaskId) (todo.TodoTask, error) {
 	t, ok, err := uc.GetTodoByID(id)
 	if err != nil {
-		return todo.Todo{}, err
+		return todo.TodoTask{}, err
 	}
 	if !ok {
-		return todo.Todo{}, fmt.Errorf("todo with id %s not found", id)
+		return todo.TodoTask{}, fmt.Errorf("todo with id %s not found", id)
 	}
-	if t.IsPending() {
-		return todo.Todo{}, fmt.Errorf("todo with id %s is already pending", id)
-	}
-	t.SwitchState()
-	if err := uc.UpdateTodo(t); err != nil {
-		return todo.Todo{}, err
+	if err := t.Pend(); err != nil {
+		return todo.TodoTask{}, err
 	}
 	return t, nil
 }

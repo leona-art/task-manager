@@ -1,31 +1,36 @@
 package inmemory
 
-import "github.com/leona-art/task-manager/domain/entity/todo"
+import (
+	"fmt"
+
+	"github.com/leona-art/task-manager/domain/entity/task"
+	"github.com/leona-art/task-manager/domain/entity/todo"
+)
 
 type InMemoryTodoRepository struct {
-	todos map[todo.TodoId]todo.Todo
+	todos map[task.TaskId]todo.TodoTask
 }
 
 func NewInMemoryTodoRepository() *InMemoryTodoRepository {
 	return &InMemoryTodoRepository{
-		todos: make(map[todo.TodoId]todo.Todo),
+		todos: make(map[task.TaskId]todo.TodoTask),
 	}
 }
 
 // Delete implements todo.TodoRepository.
-func (i *InMemoryTodoRepository) Delete(id todo.TodoId) (ok bool, err error) {
+func (i *InMemoryTodoRepository) Delete(id task.TaskId) (ok bool, err error) {
 	delete(i.todos, id)
 	return true, nil
 }
 
 // GetByID implements todo.TodoRepository.
-func (i *InMemoryTodoRepository) GetByID(id todo.TodoId) (value todo.Todo, ok bool, err error) {
+func (i *InMemoryTodoRepository) Get(id task.TaskId) (value todo.TodoTask, ok bool, err error) {
 	value, ok = i.todos[id]
 	return value, ok, nil
 }
 
 // List implements todo.TodoRepository.
-func (i *InMemoryTodoRepository) List() (todos []todo.Todo, err error) {
+func (i *InMemoryTodoRepository) List() (todos []todo.TodoTask, err error) {
 	for _, todo := range i.todos {
 		todos = append(todos, todo)
 	}
@@ -33,13 +38,15 @@ func (i *InMemoryTodoRepository) List() (todos []todo.Todo, err error) {
 }
 
 // Save implements todo.TodoRepository.
-func (i *InMemoryTodoRepository) Save(todo todo.Todo) error {
-	i.todos[todo.ID] = todo
+func (i *InMemoryTodoRepository) Save(todo todo.TodoTask) error {
+	i.todos[todo.Info().ID] = todo
 	return nil
 }
 
-// Update implements todo.TodoRepository.
-func (i *InMemoryTodoRepository) Update(todo todo.Todo) error {
-	i.todos[todo.ID] = todo
+func (i *InMemoryTodoRepository) Create(todo todo.TodoTask) error {
+	if _, exists := i.todos[todo.Info().ID]; exists {
+		return fmt.Errorf("todo with ID %s already exists", todo.Info().ID)
+	}
+	i.todos[todo.Info().ID] = todo
 	return nil
 }

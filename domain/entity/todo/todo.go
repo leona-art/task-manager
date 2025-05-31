@@ -11,6 +11,13 @@ type TodoTask struct {
 	state TodoState
 }
 
+func NewTodoTask(info task.BaseTask) TodoTask {
+	return TodoTask{
+		info:  info,
+		state: NewPendingState(),
+	}
+}
+
 func (t *TodoTask) Info() task.BaseTask {
 	return t.info
 }
