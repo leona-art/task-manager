@@ -3,8 +3,8 @@ package issue
 type IssueStatus string
 
 const (
-	Pending     IssueStatus = "pending"
-	Researching IssueStatus = "researching"
-	Resolving   IssueStatus = "resolving"
-	Resolved    IssueStatus = "resolved"
+	Open          IssueStatus = "open"
+	Investigating IssueStatus = "investigating"
+	Resolving     IssueStatus = "resolving"
+	Closed        IssueStatus = "closed"
 )

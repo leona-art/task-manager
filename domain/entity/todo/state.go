@@ -1,6 +1,7 @@
 package todo
 
+type TransitionMap map[TodoStatus]func() TodoState
 type TodoState interface {
 	Status() TodoStatus
-	Switch() TodoState
+	Candidates() TransitionMap
 }

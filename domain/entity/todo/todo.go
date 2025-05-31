@@ -1,43 +1,37 @@
 package todo
 
-import "github.com/leona-art/task-manager/domain/entity/taskinfo"
+import (
+	"fmt"
 
-type Todo struct {
-	ID    TodoId
-	Info  taskinfo.TaskInfo
-	State TodoState
+	"github.com/leona-art/task-manager/domain/entity/task"
+)
+
+type TodoTask struct {
+	info  task.BaseTask
+	state TodoState
 }
 
-func NewTodo(title, description string) (Todo, error) {
-	id, err := NewTodoId()
-	if err != nil {
-		return Todo{}, err
+func (t *TodoTask) Info() task.BaseTask {
+	return t.info
+}
+func (t *TodoTask) Kind() task.TaskKind {
+	return task.TaskKindTodo
+}
+
+func (t *TodoTask) Do() error {
+	if next, ok := t.state.Candidates()[Done]; ok {
+		t.state = next()
+	} else {
+		return fmt.Errorf("cannot mark todo as done")
 	}
-	return Todo{
-		ID:    id,
-		Info:  taskinfo.NewTaskInfo(title, description),
-		State: NewTodoPendingState(),
-	}, nil
-}
-func (t *Todo) SwitchState() {
-	t.State = t.State.Switch()
-	t.Info.Update()
+	return nil
 }
 
-func (t *Todo) Equal(other Todo) bool {
-	return t.Info.Equal(other.Info) &&
-		t.State.Status() == other.State.Status()
-}
-
-func (t *Todo) IsDone() bool {
-	return t.State.Status() == Done
-}
-func (t *Todo) IsPending() bool {
-	return t.State.Status() == Pending
-}
-
-func (t *Todo) IsEmpty() bool {
-	return t.ID.String() == "" &&
-		t.Info.IsEmpty() &&
-		t.State.Status() == Pending
+func (t *TodoTask) Pend() error {
+	if next, ok := t.state.Candidates()[Pending]; ok {
+		t.state = next()
+	} else {
+		return fmt.Errorf("cannot pend todo")
+	}
+	return nil
 }

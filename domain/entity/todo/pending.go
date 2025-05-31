@@ -1,15 +1,18 @@
 package todo
 
-type TodoPendingStatus struct{}
+type PendingState struct{}
 
-func (s TodoPendingStatus) Status() TodoStatus {
+func (s PendingState) Status() TodoStatus {
 	return Pending
 }
-
-func (s TodoPendingStatus) Switch() TodoState {
-	return NewTodoDoneState()
+func (s PendingState) Candidates() TransitionMap {
+	return TransitionMap{
+		Done: func() TodoState {
+			return NewDoneState()
+		},
+	}
 }
 
-func NewTodoPendingState() TodoPendingStatus {
-	return TodoPendingStatus{}
+func NewPendingState() TodoState {
+	return PendingState{}
 }

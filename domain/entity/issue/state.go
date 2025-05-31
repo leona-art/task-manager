@@ -1,9 +1,9 @@
 package issue
 
+type TransitionMap map[IssueStatus]func() IssueState
 type IssueState interface {
 	Status() IssueStatus
+	Candidates() TransitionMap
 	Cause() (value string, ok bool)
-	Resolution() (value string, ok bool)
-	Candidate() TransitionMap
+	Solution() (value string, ok bool)
 }
-type TransitionMap map[IssueStatus]func() IssueState

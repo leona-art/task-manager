@@ -3,52 +3,63 @@ package issue
 import (
 	"fmt"
 
-	"github.com/leona-art/task-manager/domain/entity/taskinfo"
+	"github.com/leona-art/task-manager/domain/entity/task"
 )
 
-type Issue struct {
-	ID     IssueId
-	Info   taskinfo.TaskInfo
-	Status IssueState
+type IssueTask struct {
+	info  task.BaseTask
+	state IssueState
 }
 
-func NewIssue(title, description string) (Issue, error) {
-	id, err := NewIssueId()
-	if err != nil {
-		return Issue{}, err
-	}
-	return Issue{
-		ID:     id,
-		Info:   taskinfo.NewTaskInfo(title, description),
-		Status: NewIssuePendingState(),
-	}, nil
+func (i *IssueTask) Info() task.BaseTask {
+	return i.info
 }
-func (i *Issue) StartResearching() error {
-	candidate := i.Status.Candidate()
-	if progress, ok := candidate[Researching]; ok {
-		i.Status = progress()
+func (i *IssueTask) Kind() task.TaskKind {
+	return task.TaskKindIssue
+}
+
+func (i *IssueTask) Investigate() error {
+	if next, ok := i.state.Candidates()[Investigating]; ok {
+		i.state = next()
 	} else {
-		return fmt.Errorf("cannot open issue for research: no candidate status found")
+		return fmt.Errorf("cannot start investigating issue task")
 	}
 	return nil
 }
 
-func (i *Issue) StartResolution() error {
-	candidate := i.Status.Candidate()
-	if resolve, ok := candidate[Resolving]; ok {
-		i.Status = resolve()
+func (i *IssueTask) Resolve() error {
+	if next, ok := i.state.Candidates()[Resolving]; ok {
+		i.state = next()
 	} else {
-		return fmt.Errorf("cannot open issue for resolution: no candidate status found")
+		return fmt.Errorf("cannot resolve issue task")
 	}
 	return nil
 }
 
-func (i *Issue) Resolve(resolution string) error {
-	candidate := i.Status.Candidate()
-	if resolved, ok := candidate[Resolved]; ok {
-		i.Status = resolved()
+func (i *IssueTask) Close() error {
+	if next, ok := i.state.Candidates()[Closed]; ok {
+		i.state = next()
 	} else {
-		return fmt.Errorf("cannot resolve issue: no candidate status found")
+		return fmt.Errorf("cannot close issue task")
+	}
+	return nil
+}
+func (i *IssueTask) SetCause(cause string) error {
+	switch state := i.state.(type) {
+	case InvestigatingState:
+		i.state = state.WithCause(cause)
+	default:
+		return fmt.Errorf("cannot set cause for issue task in state %T", state)
+	}
+	return nil
+}
+
+func (i *IssueTask) SetSolution(solution string) error {
+	switch state := i.state.(type) {
+	case ResolvingState:
+		i.state = state.WithSolution(solution)
+	default:
+		return fmt.Errorf("cannot set solution for issue task in state %T", state)
 	}
 	return nil
 }
