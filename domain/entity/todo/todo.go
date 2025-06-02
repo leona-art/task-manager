@@ -7,25 +7,25 @@ import (
 )
 
 type TodoTask struct {
-	info  task.BaseTask
+	data  task.TaskEntity
 	state TodoState
 }
 
-func NewTodoTask(info task.BaseTask) TodoTask {
+func NewTodoTask(data task.TaskEntity) TodoTask {
 	return TodoTask{
-		info:  info,
+		data:  data,
 		state: NewPendingState(),
 	}
 }
 
-func (t *TodoTask) Info() task.BaseTask {
-	return t.info
+func (t *TodoTask) Data() task.TaskEntity {
+	return t.data
 }
 func (t *TodoTask) Kind() task.TaskKind {
 	return task.TaskKindTodo
 }
 
-func (t *TodoTask) Do() error {
+func (t *TodoTask) MarkAsDone() error {
 	if next, ok := t.state.Candidates()[Done]; ok {
 		t.state = next()
 	} else {
@@ -34,7 +34,7 @@ func (t *TodoTask) Do() error {
 	return nil
 }
 
-func (t *TodoTask) Pend() error {
+func (t *TodoTask) Revert() error {
 	if next, ok := t.state.Candidates()[Pending]; ok {
 		t.state = next()
 	} else {

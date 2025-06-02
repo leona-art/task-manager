@@ -39,14 +39,14 @@ func (i *InMemoryTodoRepository) List() (todos []todo.TodoTask, err error) {
 
 // Save implements todo.TodoRepository.
 func (i *InMemoryTodoRepository) Save(todo todo.TodoTask) error {
-	i.todos[todo.Info().ID] = todo
+	i.todos[todo.Data().ID] = todo
 	return nil
 }
 
 func (i *InMemoryTodoRepository) Create(todo todo.TodoTask) error {
-	if _, exists := i.todos[todo.Info().ID]; exists {
-		return fmt.Errorf("todo with ID %s already exists", todo.Info().ID)
+	if _, exists := i.todos[todo.Data().ID]; exists {
+		return fmt.Errorf("todo with ID %s already exists", todo.Data().ID)
 	}
-	i.todos[todo.Info().ID] = todo
+	i.todos[todo.Data().ID] = todo
 	return nil
 }

@@ -7,11 +7,11 @@ import (
 )
 
 type IssueTask struct {
-	info  task.BaseTask
+	info  task.TaskEntity
 	state IssueState
 }
 
-func (i *IssueTask) Info() task.BaseTask {
+func (i *IssueTask) Info() task.TaskEntity {
 	return i.info
 }
 func (i *IssueTask) Kind() task.TaskKind {

@@ -2,7 +2,7 @@ package task
 
 import "time"
 
-type BaseTask struct {
+type TaskEntity struct {
 	ID          TaskId
 	Title       string
 	Description string
@@ -10,13 +10,13 @@ type BaseTask struct {
 	UpdatedAt   time.Time
 }
 
-func NewBaseTask(title, description string) (BaseTask, error) {
+func NewTaskEntity(title, description string) (TaskEntity, error) {
 	id, err := NewTaskId()
 	if err != nil {
-		return BaseTask{}, err
+		return TaskEntity{}, err
 	}
 	now := time.Now()
-	return BaseTask{
+	return TaskEntity{
 		ID:          id,
 		Title:       title,
 		Description: description,

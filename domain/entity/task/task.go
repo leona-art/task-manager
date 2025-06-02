@@ -1,6 +1,6 @@
 package task
 
 type Task interface {
-	Info() BaseTask
+	Data() TaskEntity
 	Kind() TaskKind
 }

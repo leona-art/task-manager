@@ -18,7 +18,7 @@ func NewTodoUseCase(repository todo.TodoRepository) *TodoUseCase {
 }
 
 func (uc *TodoUseCase) CreateTodo(title, description string) (todo.TodoTask, error) {
-	info, err := task.NewBaseTask(title, description)
+	info, err := task.NewTaskEntity(title, description)
 	if err != nil {
 		return todo.TodoTask{}, err
 	}
@@ -72,7 +72,7 @@ func (uc *TodoUseCase) DoTodo(id task.TaskId) (todo.TodoTask, error) {
 	if !ok {
 		return todo.TodoTask{}, fmt.Errorf("todo with id %s not found", id)
 	}
-	if err := t.Do(); err != nil {
+	if err := t.MarkAsDone(); err != nil {
 		return todo.TodoTask{}, err
 	}
 	return t, nil
@@ -86,7 +86,7 @@ func (uc *TodoUseCase) UndoTodo(id task.TaskId) (todo.TodoTask, error) {
 	if !ok {
 		return todo.TodoTask{}, fmt.Errorf("todo with id %s not found", id)
 	}
-	if err := t.Pend(); err != nil {
+	if err := t.Revert(); err != nil {
 		return todo.TodoTask{}, err
 	}
 	return t, nil

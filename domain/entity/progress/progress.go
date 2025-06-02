@@ -7,11 +7,11 @@ import (
 )
 
 type ProgressTask struct {
-	info  task.BaseTask
+	info  task.TaskEntity
 	state ProgressState
 }
 
-func (p *ProgressTask) Info() task.BaseTask {
+func (p *ProgressTask) Info() task.TaskEntity {
 	return p.info
 }
 
