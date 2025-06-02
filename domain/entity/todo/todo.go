@@ -24,6 +24,9 @@ func (t *TodoTask) Data() task.TaskEntity {
 func (t *TodoTask) Kind() task.TaskKind {
 	return task.TaskKindTodo
 }
+func (t *TodoTask) State() TodoState {
+	return t.state
+}
 
 func (t *TodoTask) MarkAsDone() error {
 	if next, ok := t.state.Candidates()[Done]; ok {

@@ -1,6 +1,10 @@
 package task
 
-import "github.com/google/uuid"
+import (
+	"fmt"
+
+	"github.com/google/uuid"
+)
 
 type TaskId string
 
@@ -10,6 +14,17 @@ func NewTaskId() (TaskId, error) {
 		return "", err
 	}
 	return TaskId(id.String()), nil
+}
+
+func NewTaskIdFromString(s string) (TaskId, error) {
+	id, err := uuid.Parse(s)
+	if err != nil {
+		return "", err
+	}
+	if id.Version() != 7 {
+		return "", fmt.Errorf("invalid UUID version: %d, expected version 7", id.Version())
+	}
+	return TaskId(s), nil
 }
 
 func (id TaskId) String() string {
