@@ -18,11 +18,11 @@ func NewTodoUseCase(repository todo.TodoRepository) *TodoUseCase {
 }
 
 func (uc *TodoUseCase) CreateTodo(title, description string) (todo.TodoTask, error) {
-	info, err := task.NewTaskEntity(title, description)
+	taskEntity, err := task.NewTaskEntity(title, description)
 	if err != nil {
 		return todo.TodoTask{}, err
 	}
-	todoTask := todo.NewTodoTask(info)
+	todoTask := todo.NewTodoTask(taskEntity)
 
 	if err := uc.repository.Save(todoTask); err != nil {
 		return todo.TodoTask{}, err
@@ -64,7 +64,7 @@ func (uc *TodoUseCase) ListTodos() ([]todo.TodoTask, error) {
 	return todos, nil
 }
 
-func (uc *TodoUseCase) DoTodo(id task.TaskId) (todo.TodoTask, error) {
+func (uc *TodoUseCase) MarkAsDoneTodo(id task.TaskId) (todo.TodoTask, error) {
 	t, ok, err := uc.GetTodoByID(id)
 	if err != nil {
 		return todo.TodoTask{}, err
@@ -78,7 +78,7 @@ func (uc *TodoUseCase) DoTodo(id task.TaskId) (todo.TodoTask, error) {
 	return t, nil
 }
 
-func (uc *TodoUseCase) UndoTodo(id task.TaskId) (todo.TodoTask, error) {
+func (uc *TodoUseCase) RevertTodo(id task.TaskId) (todo.TodoTask, error) {
 	t, ok, err := uc.GetTodoByID(id)
 	if err != nil {
 		return todo.TodoTask{}, err
