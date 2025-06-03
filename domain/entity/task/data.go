@@ -24,3 +24,13 @@ func NewTaskEntity(title, description string) (TaskEntity, error) {
 		UpdatedAt:   now,
 	}, nil
 }
+
+func (t *TaskEntity) Set(title, description string) {
+	t.Title = title
+	t.Description = description
+	t.UpdatedAt = time.Now()
+}
+
+func (t *TaskEntity) Update() {
+	t.UpdatedAt = time.Now()
+}

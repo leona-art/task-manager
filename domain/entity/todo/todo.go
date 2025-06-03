@@ -34,6 +34,7 @@ func (t *TodoTask) MarkAsDone() error {
 	} else {
 		return fmt.Errorf("cannot mark todo as done")
 	}
+	t.data.Update()
 	return nil
 }
 
@@ -43,5 +44,6 @@ func (t *TodoTask) Revert() error {
 	} else {
 		return fmt.Errorf("cannot pend todo")
 	}
+	t.data.Update()
 	return nil
 }

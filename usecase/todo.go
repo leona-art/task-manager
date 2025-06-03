@@ -75,6 +75,9 @@ func (uc *TodoUseCase) MarkAsDoneTodo(id task.TaskId) (todo.TodoTask, error) {
 	if err := t.MarkAsDone(); err != nil {
 		return todo.TodoTask{}, err
 	}
+	if err := uc.repository.Save(t); err != nil {
+		return todo.TodoTask{}, err
+	}
 	return t, nil
 }
 
@@ -87,6 +90,9 @@ func (uc *TodoUseCase) RevertTodo(id task.TaskId) (todo.TodoTask, error) {
 		return todo.TodoTask{}, fmt.Errorf("todo with id %s not found", id)
 	}
 	if err := t.Revert(); err != nil {
+		return todo.TodoTask{}, err
+	}
+	if err := uc.repository.Save(t); err != nil {
 		return todo.TodoTask{}, err
 	}
 	return t, nil
