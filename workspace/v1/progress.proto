@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package workspace.v1;
+
+option go_package = "github.com/leona-art/task-manager/gen/workspace/v1;workspacev1";
+
+import "google/protobuf/timestamp.proto";
+
+message ProgressNotStartedState {}
+
+message ProgressInProgressState {
+    optional string solution = 1;
+}
+
+message ProgressCompletedState {
+    string solution = 1; // Message indicating completion
+}
+
+message ProgressState{
+    oneof state {
+        ProgressNotStartedState not_started = 1;
+        ProgressInProgressState in_progress = 2;
+        ProgressCompletedState completed = 3;
+    }
+}
+
+message Progress {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  ProgressState state = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+// --------------
+
+
+message CreateProgressRequest {
+  string title = 1;
+  string description = 2;
+}
+message CreateProgressResponse {
+  Progress progress = 1;
+}
+
+
+message GetProgressRequest {
+  string id = 1;
+}
+message GetProgressResponse {
+  Progress progress = 1;
+}
+
+message ListProgressesRequest {}
+message ListProgressesResponse {
+  repeated Progress progresses = 1;
+}
+
+message SetProgressSolutionRequest {
+  string id = 1;
+  string solution = 2;
+}
+message SetProgressSolutionResponse {
+  Progress progress = 1;
+}
+
+message StartProgressRequest {
+  string id = 1;
+}
+message StartProgressResponse {
+  Progress progress = 1;
+}
+message CompleteProgressRequest {
+  string id = 1;
+}
+message CompleteProgressResponse {
+  Progress progress = 1;
+}
+message DeleteProgressRequest {
+  string id = 1;
+}
+message DeleteProgressResponse {}

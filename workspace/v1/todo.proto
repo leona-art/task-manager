@@ -22,6 +22,7 @@ message Todo {
   google.protobuf.Timestamp updated_at = 6;
 }
 
+// Todoを作成するリクエストとレスポンス
 message CreateTodoRequest {
   string title = 1;
   string description = 2;
@@ -30,6 +31,7 @@ message CreateTodoResponse {
   Todo todo = 1;
 }
 
+// Todoを取得するリクエストとレスポンス
 message GetTodoRequest {
   string id = 1;
 }
@@ -37,21 +39,31 @@ message GetTodoResponse {
   Todo todo = 1;
 }
 
+// Todoの一覧を取得するリクエストとレスポンス
 message ListTodosRequest {}
 
 message ListTodosResponse {
   repeated Todo todos = 1;
 }
 
+// Todoの状態を変更するリクエストとレスポンス
 message DoTodoRequest {
   string id = 1;
 }
 message DoTodoResponse {
   Todo todo = 1;
 }
+
+// Todoの状態を未完了に戻すリクエストとレスポンス
 message UndoneTodoRequest {
   string id = 1;
 }
 message UndoneTodoResponse {
   Todo todo = 1;
 }
+
+// Todoを削除するリクエストとレスポンス
+message DeleteTodoRequest {
+  string id = 1;
+}
+message DeleteTodoResponse {}

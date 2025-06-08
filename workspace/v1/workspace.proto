@@ -5,7 +5,7 @@ package workspace.v1;
 option go_package = "github.com/leona-art/task-manager/gen/workspace/v1;workspacev1";
 
 import "workspace/v1/todo.proto";
-import "workspace/v1/task.proto";
+import "workspace/v1/progress.proto";
 
 service WorkspaceService {
     rpc CreateTodo (CreateTodoRequest) returns (CreateTodoResponse);
@@ -13,4 +13,15 @@ service WorkspaceService {
     rpc ListTodos (ListTodosRequest) returns (ListTodosResponse);
     rpc DoTodo (DoTodoRequest) returns (DoTodoResponse);
     rpc UndoneTodo (UndoneTodoRequest) returns (UndoneTodoResponse);
+    rpc DeleteTodo (DeleteTodoRequest) returns (DeleteTodoResponse);
+
+    rpc CreateProgress (CreateProgressRequest) returns (CreateProgressResponse);
+    rpc GetProgress (GetProgressRequest) returns (GetProgressResponse);
+    rpc ListProgresses (ListProgressesRequest) returns (ListProgressesResponse);
+    rpc SetProgressSolution (SetProgressSolutionRequest) returns (SetProgressSolutionResponse);
+    rpc StartProgress (StartProgressRequest) returns (StartProgressResponse);
+    rpc CompleteProgress (CompleteProgressRequest) returns (CompleteProgressResponse);
+    rpc DeleteProgress (DeleteProgressRequest) returns (DeleteProgressResponse);
+
+    
 }
