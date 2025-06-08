@@ -24,8 +24,14 @@ var File_workspace_v1_workspace_proto protoreflect.FileDescriptor
 
 const file_workspace_v1_workspace_proto_rawDesc = "" +
 	"\n" +
-	"\x1cworkspace/v1/workspace.proto\x12\fworkspace.v1\x1a\x17workspace/v1/todo.proto\x1a\x1bworkspace/v1/progress.proto2\xf4\b\n" +
+	"\x1cworkspace/v1/workspace.proto\x12\fworkspace.v1\x1a\x17workspace/v1/todo.proto\x1a\x1bworkspace/v1/progress.proto\x1a\x18workspace/v1/issue.proto\x1a\x17workspace/v1/task.proto2\xfb\x0f\n" +
 	"\x10WorkspaceService\x12O\n" +
+	"\n" +
+	"CreateTask\x12\x1f.workspace.v1.CreateTaskRequest\x1a .workspace.v1.CreateTaskResponse\x12F\n" +
+	"\aGetTask\x12\x1c.workspace.v1.GetTaskRequest\x1a\x1d.workspace.v1.GetTaskResponse\x12L\n" +
+	"\tListTasks\x12\x1e.workspace.v1.ListTasksRequest\x1a\x1f.workspace.v1.ListTasksResponse\x12O\n" +
+	"\n" +
+	"DeleteTask\x12\x1f.workspace.v1.DeleteTaskRequest\x1a .workspace.v1.DeleteTaskResponse\x12O\n" +
 	"\n" +
 	"CreateTodo\x12\x1f.workspace.v1.CreateTodoRequest\x1a .workspace.v1.CreateTodoResponse\x12F\n" +
 	"\aGetTodo\x12\x1c.workspace.v1.GetTodoRequest\x1a\x1d.workspace.v1.GetTodoResponse\x12L\n" +
@@ -41,65 +47,118 @@ const file_workspace_v1_workspace_proto_rawDesc = "" +
 	"\x13SetProgressSolution\x12(.workspace.v1.SetProgressSolutionRequest\x1a).workspace.v1.SetProgressSolutionResponse\x12X\n" +
 	"\rStartProgress\x12\".workspace.v1.StartProgressRequest\x1a#.workspace.v1.StartProgressResponse\x12a\n" +
 	"\x10CompleteProgress\x12%.workspace.v1.CompleteProgressRequest\x1a&.workspace.v1.CompleteProgressResponse\x12[\n" +
-	"\x0eDeleteProgress\x12#.workspace.v1.DeleteProgressRequest\x1a$.workspace.v1.DeleteProgressResponseB@Z>github.com/leona-art/task-manager/gen/workspace/v1;workspacev1b\x06proto3"
+	"\x0eDeleteProgress\x12#.workspace.v1.DeleteProgressRequest\x1a$.workspace.v1.DeleteProgressResponse\x12R\n" +
+	"\vCreateIssue\x12 .workspace.v1.CreateIssueRequest\x1a!.workspace.v1.CreateIssueResponse\x12I\n" +
+	"\bGetIssue\x12\x1d.workspace.v1.GetIssueRequest\x1a\x1e.workspace.v1.GetIssueResponse\x12O\n" +
+	"\n" +
+	"ListIssues\x12\x1f.workspace.v1.ListIssuesRequest\x1a .workspace.v1.ListIssuesResponse\x12a\n" +
+	"\x10InvestigateIssue\x12%.workspace.v1.InvestigateIssueRequest\x1a&.workspace.v1.InvestigateIssueResponse\x12U\n" +
+	"\fResolveIssue\x12!.workspace.v1.ResolveIssueRequest\x1a\".workspace.v1.ResolveIssueResponse\x12O\n" +
+	"\n" +
+	"CloseIssue\x12\x1f.workspace.v1.CloseIssueRequest\x1a .workspace.v1.CloseIssueResponse\x12R\n" +
+	"\vDeleteIssue\x12 .workspace.v1.DeleteIssueRequest\x1a!.workspace.v1.DeleteIssueResponseB@Z>github.com/leona-art/task-manager/gen/workspace/v1;workspacev1b\x06proto3"
 
 var file_workspace_v1_workspace_proto_goTypes = []any{
-	(*CreateTodoRequest)(nil),           // 0: workspace.v1.CreateTodoRequest
-	(*GetTodoRequest)(nil),              // 1: workspace.v1.GetTodoRequest
-	(*ListTodosRequest)(nil),            // 2: workspace.v1.ListTodosRequest
-	(*DoTodoRequest)(nil),               // 3: workspace.v1.DoTodoRequest
-	(*UndoneTodoRequest)(nil),           // 4: workspace.v1.UndoneTodoRequest
-	(*DeleteTodoRequest)(nil),           // 5: workspace.v1.DeleteTodoRequest
-	(*CreateProgressRequest)(nil),       // 6: workspace.v1.CreateProgressRequest
-	(*GetProgressRequest)(nil),          // 7: workspace.v1.GetProgressRequest
-	(*ListProgressesRequest)(nil),       // 8: workspace.v1.ListProgressesRequest
-	(*SetProgressSolutionRequest)(nil),  // 9: workspace.v1.SetProgressSolutionRequest
-	(*StartProgressRequest)(nil),        // 10: workspace.v1.StartProgressRequest
-	(*CompleteProgressRequest)(nil),     // 11: workspace.v1.CompleteProgressRequest
-	(*DeleteProgressRequest)(nil),       // 12: workspace.v1.DeleteProgressRequest
-	(*CreateTodoResponse)(nil),          // 13: workspace.v1.CreateTodoResponse
-	(*GetTodoResponse)(nil),             // 14: workspace.v1.GetTodoResponse
-	(*ListTodosResponse)(nil),           // 15: workspace.v1.ListTodosResponse
-	(*DoTodoResponse)(nil),              // 16: workspace.v1.DoTodoResponse
-	(*UndoneTodoResponse)(nil),          // 17: workspace.v1.UndoneTodoResponse
-	(*DeleteTodoResponse)(nil),          // 18: workspace.v1.DeleteTodoResponse
-	(*CreateProgressResponse)(nil),      // 19: workspace.v1.CreateProgressResponse
-	(*GetProgressResponse)(nil),         // 20: workspace.v1.GetProgressResponse
-	(*ListProgressesResponse)(nil),      // 21: workspace.v1.ListProgressesResponse
-	(*SetProgressSolutionResponse)(nil), // 22: workspace.v1.SetProgressSolutionResponse
-	(*StartProgressResponse)(nil),       // 23: workspace.v1.StartProgressResponse
-	(*CompleteProgressResponse)(nil),    // 24: workspace.v1.CompleteProgressResponse
-	(*DeleteProgressResponse)(nil),      // 25: workspace.v1.DeleteProgressResponse
+	(*CreateTaskRequest)(nil),           // 0: workspace.v1.CreateTaskRequest
+	(*GetTaskRequest)(nil),              // 1: workspace.v1.GetTaskRequest
+	(*ListTasksRequest)(nil),            // 2: workspace.v1.ListTasksRequest
+	(*DeleteTaskRequest)(nil),           // 3: workspace.v1.DeleteTaskRequest
+	(*CreateTodoRequest)(nil),           // 4: workspace.v1.CreateTodoRequest
+	(*GetTodoRequest)(nil),              // 5: workspace.v1.GetTodoRequest
+	(*ListTodosRequest)(nil),            // 6: workspace.v1.ListTodosRequest
+	(*DoTodoRequest)(nil),               // 7: workspace.v1.DoTodoRequest
+	(*UndoneTodoRequest)(nil),           // 8: workspace.v1.UndoneTodoRequest
+	(*DeleteTodoRequest)(nil),           // 9: workspace.v1.DeleteTodoRequest
+	(*CreateProgressRequest)(nil),       // 10: workspace.v1.CreateProgressRequest
+	(*GetProgressRequest)(nil),          // 11: workspace.v1.GetProgressRequest
+	(*ListProgressesRequest)(nil),       // 12: workspace.v1.ListProgressesRequest
+	(*SetProgressSolutionRequest)(nil),  // 13: workspace.v1.SetProgressSolutionRequest
+	(*StartProgressRequest)(nil),        // 14: workspace.v1.StartProgressRequest
+	(*CompleteProgressRequest)(nil),     // 15: workspace.v1.CompleteProgressRequest
+	(*DeleteProgressRequest)(nil),       // 16: workspace.v1.DeleteProgressRequest
+	(*CreateIssueRequest)(nil),          // 17: workspace.v1.CreateIssueRequest
+	(*GetIssueRequest)(nil),             // 18: workspace.v1.GetIssueRequest
+	(*ListIssuesRequest)(nil),           // 19: workspace.v1.ListIssuesRequest
+	(*InvestigateIssueRequest)(nil),     // 20: workspace.v1.InvestigateIssueRequest
+	(*ResolveIssueRequest)(nil),         // 21: workspace.v1.ResolveIssueRequest
+	(*CloseIssueRequest)(nil),           // 22: workspace.v1.CloseIssueRequest
+	(*DeleteIssueRequest)(nil),          // 23: workspace.v1.DeleteIssueRequest
+	(*CreateTaskResponse)(nil),          // 24: workspace.v1.CreateTaskResponse
+	(*GetTaskResponse)(nil),             // 25: workspace.v1.GetTaskResponse
+	(*ListTasksResponse)(nil),           // 26: workspace.v1.ListTasksResponse
+	(*DeleteTaskResponse)(nil),          // 27: workspace.v1.DeleteTaskResponse
+	(*CreateTodoResponse)(nil),          // 28: workspace.v1.CreateTodoResponse
+	(*GetTodoResponse)(nil),             // 29: workspace.v1.GetTodoResponse
+	(*ListTodosResponse)(nil),           // 30: workspace.v1.ListTodosResponse
+	(*DoTodoResponse)(nil),              // 31: workspace.v1.DoTodoResponse
+	(*UndoneTodoResponse)(nil),          // 32: workspace.v1.UndoneTodoResponse
+	(*DeleteTodoResponse)(nil),          // 33: workspace.v1.DeleteTodoResponse
+	(*CreateProgressResponse)(nil),      // 34: workspace.v1.CreateProgressResponse
+	(*GetProgressResponse)(nil),         // 35: workspace.v1.GetProgressResponse
+	(*ListProgressesResponse)(nil),      // 36: workspace.v1.ListProgressesResponse
+	(*SetProgressSolutionResponse)(nil), // 37: workspace.v1.SetProgressSolutionResponse
+	(*StartProgressResponse)(nil),       // 38: workspace.v1.StartProgressResponse
+	(*CompleteProgressResponse)(nil),    // 39: workspace.v1.CompleteProgressResponse
+	(*DeleteProgressResponse)(nil),      // 40: workspace.v1.DeleteProgressResponse
+	(*CreateIssueResponse)(nil),         // 41: workspace.v1.CreateIssueResponse
+	(*GetIssueResponse)(nil),            // 42: workspace.v1.GetIssueResponse
+	(*ListIssuesResponse)(nil),          // 43: workspace.v1.ListIssuesResponse
+	(*InvestigateIssueResponse)(nil),    // 44: workspace.v1.InvestigateIssueResponse
+	(*ResolveIssueResponse)(nil),        // 45: workspace.v1.ResolveIssueResponse
+	(*CloseIssueResponse)(nil),          // 46: workspace.v1.CloseIssueResponse
+	(*DeleteIssueResponse)(nil),         // 47: workspace.v1.DeleteIssueResponse
 }
 var file_workspace_v1_workspace_proto_depIdxs = []int32{
-	0,  // 0: workspace.v1.WorkspaceService.CreateTodo:input_type -> workspace.v1.CreateTodoRequest
-	1,  // 1: workspace.v1.WorkspaceService.GetTodo:input_type -> workspace.v1.GetTodoRequest
-	2,  // 2: workspace.v1.WorkspaceService.ListTodos:input_type -> workspace.v1.ListTodosRequest
-	3,  // 3: workspace.v1.WorkspaceService.DoTodo:input_type -> workspace.v1.DoTodoRequest
-	4,  // 4: workspace.v1.WorkspaceService.UndoneTodo:input_type -> workspace.v1.UndoneTodoRequest
-	5,  // 5: workspace.v1.WorkspaceService.DeleteTodo:input_type -> workspace.v1.DeleteTodoRequest
-	6,  // 6: workspace.v1.WorkspaceService.CreateProgress:input_type -> workspace.v1.CreateProgressRequest
-	7,  // 7: workspace.v1.WorkspaceService.GetProgress:input_type -> workspace.v1.GetProgressRequest
-	8,  // 8: workspace.v1.WorkspaceService.ListProgresses:input_type -> workspace.v1.ListProgressesRequest
-	9,  // 9: workspace.v1.WorkspaceService.SetProgressSolution:input_type -> workspace.v1.SetProgressSolutionRequest
-	10, // 10: workspace.v1.WorkspaceService.StartProgress:input_type -> workspace.v1.StartProgressRequest
-	11, // 11: workspace.v1.WorkspaceService.CompleteProgress:input_type -> workspace.v1.CompleteProgressRequest
-	12, // 12: workspace.v1.WorkspaceService.DeleteProgress:input_type -> workspace.v1.DeleteProgressRequest
-	13, // 13: workspace.v1.WorkspaceService.CreateTodo:output_type -> workspace.v1.CreateTodoResponse
-	14, // 14: workspace.v1.WorkspaceService.GetTodo:output_type -> workspace.v1.GetTodoResponse
-	15, // 15: workspace.v1.WorkspaceService.ListTodos:output_type -> workspace.v1.ListTodosResponse
-	16, // 16: workspace.v1.WorkspaceService.DoTodo:output_type -> workspace.v1.DoTodoResponse
-	17, // 17: workspace.v1.WorkspaceService.UndoneTodo:output_type -> workspace.v1.UndoneTodoResponse
-	18, // 18: workspace.v1.WorkspaceService.DeleteTodo:output_type -> workspace.v1.DeleteTodoResponse
-	19, // 19: workspace.v1.WorkspaceService.CreateProgress:output_type -> workspace.v1.CreateProgressResponse
-	20, // 20: workspace.v1.WorkspaceService.GetProgress:output_type -> workspace.v1.GetProgressResponse
-	21, // 21: workspace.v1.WorkspaceService.ListProgresses:output_type -> workspace.v1.ListProgressesResponse
-	22, // 22: workspace.v1.WorkspaceService.SetProgressSolution:output_type -> workspace.v1.SetProgressSolutionResponse
-	23, // 23: workspace.v1.WorkspaceService.StartProgress:output_type -> workspace.v1.StartProgressResponse
-	24, // 24: workspace.v1.WorkspaceService.CompleteProgress:output_type -> workspace.v1.CompleteProgressResponse
-	25, // 25: workspace.v1.WorkspaceService.DeleteProgress:output_type -> workspace.v1.DeleteProgressResponse
-	13, // [13:26] is the sub-list for method output_type
-	0,  // [0:13] is the sub-list for method input_type
+	0,  // 0: workspace.v1.WorkspaceService.CreateTask:input_type -> workspace.v1.CreateTaskRequest
+	1,  // 1: workspace.v1.WorkspaceService.GetTask:input_type -> workspace.v1.GetTaskRequest
+	2,  // 2: workspace.v1.WorkspaceService.ListTasks:input_type -> workspace.v1.ListTasksRequest
+	3,  // 3: workspace.v1.WorkspaceService.DeleteTask:input_type -> workspace.v1.DeleteTaskRequest
+	4,  // 4: workspace.v1.WorkspaceService.CreateTodo:input_type -> workspace.v1.CreateTodoRequest
+	5,  // 5: workspace.v1.WorkspaceService.GetTodo:input_type -> workspace.v1.GetTodoRequest
+	6,  // 6: workspace.v1.WorkspaceService.ListTodos:input_type -> workspace.v1.ListTodosRequest
+	7,  // 7: workspace.v1.WorkspaceService.DoTodo:input_type -> workspace.v1.DoTodoRequest
+	8,  // 8: workspace.v1.WorkspaceService.UndoneTodo:input_type -> workspace.v1.UndoneTodoRequest
+	9,  // 9: workspace.v1.WorkspaceService.DeleteTodo:input_type -> workspace.v1.DeleteTodoRequest
+	10, // 10: workspace.v1.WorkspaceService.CreateProgress:input_type -> workspace.v1.CreateProgressRequest
+	11, // 11: workspace.v1.WorkspaceService.GetProgress:input_type -> workspace.v1.GetProgressRequest
+	12, // 12: workspace.v1.WorkspaceService.ListProgresses:input_type -> workspace.v1.ListProgressesRequest
+	13, // 13: workspace.v1.WorkspaceService.SetProgressSolution:input_type -> workspace.v1.SetProgressSolutionRequest
+	14, // 14: workspace.v1.WorkspaceService.StartProgress:input_type -> workspace.v1.StartProgressRequest
+	15, // 15: workspace.v1.WorkspaceService.CompleteProgress:input_type -> workspace.v1.CompleteProgressRequest
+	16, // 16: workspace.v1.WorkspaceService.DeleteProgress:input_type -> workspace.v1.DeleteProgressRequest
+	17, // 17: workspace.v1.WorkspaceService.CreateIssue:input_type -> workspace.v1.CreateIssueRequest
+	18, // 18: workspace.v1.WorkspaceService.GetIssue:input_type -> workspace.v1.GetIssueRequest
+	19, // 19: workspace.v1.WorkspaceService.ListIssues:input_type -> workspace.v1.ListIssuesRequest
+	20, // 20: workspace.v1.WorkspaceService.InvestigateIssue:input_type -> workspace.v1.InvestigateIssueRequest
+	21, // 21: workspace.v1.WorkspaceService.ResolveIssue:input_type -> workspace.v1.ResolveIssueRequest
+	22, // 22: workspace.v1.WorkspaceService.CloseIssue:input_type -> workspace.v1.CloseIssueRequest
+	23, // 23: workspace.v1.WorkspaceService.DeleteIssue:input_type -> workspace.v1.DeleteIssueRequest
+	24, // 24: workspace.v1.WorkspaceService.CreateTask:output_type -> workspace.v1.CreateTaskResponse
+	25, // 25: workspace.v1.WorkspaceService.GetTask:output_type -> workspace.v1.GetTaskResponse
+	26, // 26: workspace.v1.WorkspaceService.ListTasks:output_type -> workspace.v1.ListTasksResponse
+	27, // 27: workspace.v1.WorkspaceService.DeleteTask:output_type -> workspace.v1.DeleteTaskResponse
+	28, // 28: workspace.v1.WorkspaceService.CreateTodo:output_type -> workspace.v1.CreateTodoResponse
+	29, // 29: workspace.v1.WorkspaceService.GetTodo:output_type -> workspace.v1.GetTodoResponse
+	30, // 30: workspace.v1.WorkspaceService.ListTodos:output_type -> workspace.v1.ListTodosResponse
+	31, // 31: workspace.v1.WorkspaceService.DoTodo:output_type -> workspace.v1.DoTodoResponse
+	32, // 32: workspace.v1.WorkspaceService.UndoneTodo:output_type -> workspace.v1.UndoneTodoResponse
+	33, // 33: workspace.v1.WorkspaceService.DeleteTodo:output_type -> workspace.v1.DeleteTodoResponse
+	34, // 34: workspace.v1.WorkspaceService.CreateProgress:output_type -> workspace.v1.CreateProgressResponse
+	35, // 35: workspace.v1.WorkspaceService.GetProgress:output_type -> workspace.v1.GetProgressResponse
+	36, // 36: workspace.v1.WorkspaceService.ListProgresses:output_type -> workspace.v1.ListProgressesResponse
+	37, // 37: workspace.v1.WorkspaceService.SetProgressSolution:output_type -> workspace.v1.SetProgressSolutionResponse
+	38, // 38: workspace.v1.WorkspaceService.StartProgress:output_type -> workspace.v1.StartProgressResponse
+	39, // 39: workspace.v1.WorkspaceService.CompleteProgress:output_type -> workspace.v1.CompleteProgressResponse
+	40, // 40: workspace.v1.WorkspaceService.DeleteProgress:output_type -> workspace.v1.DeleteProgressResponse
+	41, // 41: workspace.v1.WorkspaceService.CreateIssue:output_type -> workspace.v1.CreateIssueResponse
+	42, // 42: workspace.v1.WorkspaceService.GetIssue:output_type -> workspace.v1.GetIssueResponse
+	43, // 43: workspace.v1.WorkspaceService.ListIssues:output_type -> workspace.v1.ListIssuesResponse
+	44, // 44: workspace.v1.WorkspaceService.InvestigateIssue:output_type -> workspace.v1.InvestigateIssueResponse
+	45, // 45: workspace.v1.WorkspaceService.ResolveIssue:output_type -> workspace.v1.ResolveIssueResponse
+	46, // 46: workspace.v1.WorkspaceService.CloseIssue:output_type -> workspace.v1.CloseIssueResponse
+	47, // 47: workspace.v1.WorkspaceService.DeleteIssue:output_type -> workspace.v1.DeleteIssueResponse
+	24, // [24:48] is the sub-list for method output_type
+	0,  // [0:24] is the sub-list for method input_type
 	0,  // [0:0] is the sub-list for extension type_name
 	0,  // [0:0] is the sub-list for extension extendee
 	0,  // [0:0] is the sub-list for field type_name
@@ -112,6 +171,8 @@ func file_workspace_v1_workspace_proto_init() {
 	}
 	file_workspace_v1_todo_proto_init()
 	file_workspace_v1_progress_proto_init()
+	file_workspace_v1_issue_proto_init()
+	file_workspace_v1_task_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

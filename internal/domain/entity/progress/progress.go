@@ -39,7 +39,7 @@ func NewProgressTaskFromDto(dto ProgressTaskDto) (*ProgressTask, error) {
 	}
 
 	var state ProgressState
-	switch dto.State {
+	switch dto.Status {
 	case string(NotStarted):
 		state = NewNotStartedState()
 	case string(InProgress):
@@ -55,7 +55,7 @@ func NewProgressTaskFromDto(dto ProgressTaskDto) (*ProgressTask, error) {
 			return nil, fmt.Errorf("solution is required for completed state")
 		}
 	default:
-		return nil, fmt.Errorf("invalid task state: %s", dto.State)
+		return nil, fmt.Errorf("invalid task state: %s", dto.Status)
 	}
 
 	return &ProgressTask{

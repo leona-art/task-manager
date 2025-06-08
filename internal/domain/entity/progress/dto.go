@@ -10,7 +10,7 @@ type ProgressTaskDto struct {
 	ID          string
 	Title       string
 	Description string
-	State       string
+	Status      string
 	Solution    utils.Option[string]
 	CreatedAt   time.Time
 	UpdatedAt   time.Time

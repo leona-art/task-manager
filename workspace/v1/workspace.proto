@@ -6,8 +6,15 @@ option go_package = "github.com/leona-art/task-manager/gen/workspace/v1;workspac
 
 import "workspace/v1/todo.proto";
 import "workspace/v1/progress.proto";
+import "workspace/v1/issue.proto";
+import "workspace/v1/task.proto";
 
 service WorkspaceService {
+    rpc CreateTask (CreateTaskRequest) returns (CreateTaskResponse);
+    rpc GetTask (GetTaskRequest) returns (GetTaskResponse);
+    rpc ListTasks (ListTasksRequest) returns (ListTasksResponse);
+    rpc DeleteTask (DeleteTaskRequest) returns (DeleteTaskResponse);
+
     rpc CreateTodo (CreateTodoRequest) returns (CreateTodoResponse);
     rpc GetTodo (GetTodoRequest) returns (GetTodoResponse);
     rpc ListTodos (ListTodosRequest) returns (ListTodosResponse);
@@ -23,5 +30,13 @@ service WorkspaceService {
     rpc CompleteProgress (CompleteProgressRequest) returns (CompleteProgressResponse);
     rpc DeleteProgress (DeleteProgressRequest) returns (DeleteProgressResponse);
 
+    rpc CreateIssue (CreateIssueRequest) returns (CreateIssueResponse);
+    rpc GetIssue (GetIssueRequest) returns (GetIssueResponse);
+    rpc ListIssues (ListIssuesRequest) returns (ListIssuesResponse);
+    rpc InvestigateIssue (InvestigateIssueRequest) returns (InvestigateIssueResponse);
+    rpc ResolveIssue (ResolveIssueRequest) returns (ResolveIssueResponse);
+    rpc CloseIssue (CloseIssueRequest) returns (CloseIssueResponse);
+    rpc DeleteIssue (DeleteIssueRequest) returns (DeleteIssueResponse);
     
+
 }

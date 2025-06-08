@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package workspace.v1;
+
+option go_package = "github.com/leona-art/task-manager/gen/workspace/v1;workspacev1";
+
+import "google/protobuf/timestamp.proto";
+import "workspace/v1/todo.proto";
+import "workspace/v1/progress.proto";
+import "workspace/v1/issue.proto";
+
+enum TaskType {
+    TASK_TYPE_UNSPECIFIED = 0; // Default value, should not be used
+    TASK_TYPE_TODO = 1; // Represents a Todo task
+    TASK_TYPE_PROGRESS = 2; // Represents a Progress task
+    TASK_TYPE_ISSUE = 3; // Represents an Issue task
+}
+
+message Task{
+    oneof type {
+        Todo todo = 1;
+        Progress progress = 2;
+        Issue issue = 3;
+    }
+}
+
+// --------------
+
+message CreateTaskRequest {
+    string title = 1;
+    string description = 2;
+    TaskType type = 3; // Type of the task to create
+}
+
+message CreateTaskResponse {
+    Task task = 1; // The created task
+}
+
+message GetTaskRequest {
+    string id = 1; // ID of the task to retrieve
+}
+message GetTaskResponse {
+    Task task = 1; // The retrieved task
+}
+
+message ListTasksRequest {
+    TaskType type = 1; // Optional filter by task type
+}
+message ListTasksResponse {
+    repeated Task tasks = 1; // List of tasks
+}
+
+message DeleteTaskRequest {
+    string id = 1; // ID of the task to delete
+}
+message DeleteTaskResponse {
+    string id = 1; // ID of the deleted task
+}
+
+

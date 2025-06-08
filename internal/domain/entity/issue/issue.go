@@ -11,11 +11,15 @@ type IssueTask struct {
 	state IssueState
 }
 
-func (i *IssueTask) Info() task.TaskEntity {
+func (i *IssueTask) Data() task.TaskEntity {
 	return i.info
 }
 func (i *IssueTask) Kind() task.TaskKind {
 	return task.TaskKindIssue
+}
+
+func (i *IssueTask) State() IssueState {
+	return i.state
 }
 
 func NewIssueTask(title, description string) (*IssueTask, error) {

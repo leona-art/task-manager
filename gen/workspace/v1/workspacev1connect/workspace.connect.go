@@ -33,6 +33,18 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
+	// WorkspaceServiceCreateTaskProcedure is the fully-qualified name of the WorkspaceService's
+	// CreateTask RPC.
+	WorkspaceServiceCreateTaskProcedure = "/workspace.v1.WorkspaceService/CreateTask"
+	// WorkspaceServiceGetTaskProcedure is the fully-qualified name of the WorkspaceService's GetTask
+	// RPC.
+	WorkspaceServiceGetTaskProcedure = "/workspace.v1.WorkspaceService/GetTask"
+	// WorkspaceServiceListTasksProcedure is the fully-qualified name of the WorkspaceService's
+	// ListTasks RPC.
+	WorkspaceServiceListTasksProcedure = "/workspace.v1.WorkspaceService/ListTasks"
+	// WorkspaceServiceDeleteTaskProcedure is the fully-qualified name of the WorkspaceService's
+	// DeleteTask RPC.
+	WorkspaceServiceDeleteTaskProcedure = "/workspace.v1.WorkspaceService/DeleteTask"
 	// WorkspaceServiceCreateTodoProcedure is the fully-qualified name of the WorkspaceService's
 	// CreateTodo RPC.
 	WorkspaceServiceCreateTodoProcedure = "/workspace.v1.WorkspaceService/CreateTodo"
@@ -71,10 +83,35 @@ const (
 	// WorkspaceServiceDeleteProgressProcedure is the fully-qualified name of the WorkspaceService's
 	// DeleteProgress RPC.
 	WorkspaceServiceDeleteProgressProcedure = "/workspace.v1.WorkspaceService/DeleteProgress"
+	// WorkspaceServiceCreateIssueProcedure is the fully-qualified name of the WorkspaceService's
+	// CreateIssue RPC.
+	WorkspaceServiceCreateIssueProcedure = "/workspace.v1.WorkspaceService/CreateIssue"
+	// WorkspaceServiceGetIssueProcedure is the fully-qualified name of the WorkspaceService's GetIssue
+	// RPC.
+	WorkspaceServiceGetIssueProcedure = "/workspace.v1.WorkspaceService/GetIssue"
+	// WorkspaceServiceListIssuesProcedure is the fully-qualified name of the WorkspaceService's
+	// ListIssues RPC.
+	WorkspaceServiceListIssuesProcedure = "/workspace.v1.WorkspaceService/ListIssues"
+	// WorkspaceServiceInvestigateIssueProcedure is the fully-qualified name of the WorkspaceService's
+	// InvestigateIssue RPC.
+	WorkspaceServiceInvestigateIssueProcedure = "/workspace.v1.WorkspaceService/InvestigateIssue"
+	// WorkspaceServiceResolveIssueProcedure is the fully-qualified name of the WorkspaceService's
+	// ResolveIssue RPC.
+	WorkspaceServiceResolveIssueProcedure = "/workspace.v1.WorkspaceService/ResolveIssue"
+	// WorkspaceServiceCloseIssueProcedure is the fully-qualified name of the WorkspaceService's
+	// CloseIssue RPC.
+	WorkspaceServiceCloseIssueProcedure = "/workspace.v1.WorkspaceService/CloseIssue"
+	// WorkspaceServiceDeleteIssueProcedure is the fully-qualified name of the WorkspaceService's
+	// DeleteIssue RPC.
+	WorkspaceServiceDeleteIssueProcedure = "/workspace.v1.WorkspaceService/DeleteIssue"
 )
 
 // WorkspaceServiceClient is a client for the workspace.v1.WorkspaceService service.
 type WorkspaceServiceClient interface {
+	CreateTask(context.Context, *connect.Request[v1.CreateTaskRequest]) (*connect.Response[v1.CreateTaskResponse], error)
+	GetTask(context.Context, *connect.Request[v1.GetTaskRequest]) (*connect.Response[v1.GetTaskResponse], error)
+	ListTasks(context.Context, *connect.Request[v1.ListTasksRequest]) (*connect.Response[v1.ListTasksResponse], error)
+	DeleteTask(context.Context, *connect.Request[v1.DeleteTaskRequest]) (*connect.Response[v1.DeleteTaskResponse], error)
 	CreateTodo(context.Context, *connect.Request[v1.CreateTodoRequest]) (*connect.Response[v1.CreateTodoResponse], error)
 	GetTodo(context.Context, *connect.Request[v1.GetTodoRequest]) (*connect.Response[v1.GetTodoResponse], error)
 	ListTodos(context.Context, *connect.Request[v1.ListTodosRequest]) (*connect.Response[v1.ListTodosResponse], error)
@@ -88,6 +125,13 @@ type WorkspaceServiceClient interface {
 	StartProgress(context.Context, *connect.Request[v1.StartProgressRequest]) (*connect.Response[v1.StartProgressResponse], error)
 	CompleteProgress(context.Context, *connect.Request[v1.CompleteProgressRequest]) (*connect.Response[v1.CompleteProgressResponse], error)
 	DeleteProgress(context.Context, *connect.Request[v1.DeleteProgressRequest]) (*connect.Response[v1.DeleteProgressResponse], error)
+	CreateIssue(context.Context, *connect.Request[v1.CreateIssueRequest]) (*connect.Response[v1.CreateIssueResponse], error)
+	GetIssue(context.Context, *connect.Request[v1.GetIssueRequest]) (*connect.Response[v1.GetIssueResponse], error)
+	ListIssues(context.Context, *connect.Request[v1.ListIssuesRequest]) (*connect.Response[v1.ListIssuesResponse], error)
+	InvestigateIssue(context.Context, *connect.Request[v1.InvestigateIssueRequest]) (*connect.Response[v1.InvestigateIssueResponse], error)
+	ResolveIssue(context.Context, *connect.Request[v1.ResolveIssueRequest]) (*connect.Response[v1.ResolveIssueResponse], error)
+	CloseIssue(context.Context, *connect.Request[v1.CloseIssueRequest]) (*connect.Response[v1.CloseIssueResponse], error)
+	DeleteIssue(context.Context, *connect.Request[v1.DeleteIssueRequest]) (*connect.Response[v1.DeleteIssueResponse], error)
 }
 
 // NewWorkspaceServiceClient constructs a client for the workspace.v1.WorkspaceService service. By
@@ -101,6 +145,30 @@ func NewWorkspaceServiceClient(httpClient connect.HTTPClient, baseURL string, op
 	baseURL = strings.TrimRight(baseURL, "/")
 	workspaceServiceMethods := v1.File_workspace_v1_workspace_proto.Services().ByName("WorkspaceService").Methods()
 	return &workspaceServiceClient{
+		createTask: connect.NewClient[v1.CreateTaskRequest, v1.CreateTaskResponse](
+			httpClient,
+			baseURL+WorkspaceServiceCreateTaskProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("CreateTask")),
+			connect.WithClientOptions(opts...),
+		),
+		getTask: connect.NewClient[v1.GetTaskRequest, v1.GetTaskResponse](
+			httpClient,
+			baseURL+WorkspaceServiceGetTaskProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("GetTask")),
+			connect.WithClientOptions(opts...),
+		),
+		listTasks: connect.NewClient[v1.ListTasksRequest, v1.ListTasksResponse](
+			httpClient,
+			baseURL+WorkspaceServiceListTasksProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("ListTasks")),
+			connect.WithClientOptions(opts...),
+		),
+		deleteTask: connect.NewClient[v1.DeleteTaskRequest, v1.DeleteTaskResponse](
+			httpClient,
+			baseURL+WorkspaceServiceDeleteTaskProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("DeleteTask")),
+			connect.WithClientOptions(opts...),
+		),
 		createTodo: connect.NewClient[v1.CreateTodoRequest, v1.CreateTodoResponse](
 			httpClient,
 			baseURL+WorkspaceServiceCreateTodoProcedure,
@@ -179,11 +247,57 @@ func NewWorkspaceServiceClient(httpClient connect.HTTPClient, baseURL string, op
 			connect.WithSchema(workspaceServiceMethods.ByName("DeleteProgress")),
 			connect.WithClientOptions(opts...),
 		),
+		createIssue: connect.NewClient[v1.CreateIssueRequest, v1.CreateIssueResponse](
+			httpClient,
+			baseURL+WorkspaceServiceCreateIssueProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("CreateIssue")),
+			connect.WithClientOptions(opts...),
+		),
+		getIssue: connect.NewClient[v1.GetIssueRequest, v1.GetIssueResponse](
+			httpClient,
+			baseURL+WorkspaceServiceGetIssueProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("GetIssue")),
+			connect.WithClientOptions(opts...),
+		),
+		listIssues: connect.NewClient[v1.ListIssuesRequest, v1.ListIssuesResponse](
+			httpClient,
+			baseURL+WorkspaceServiceListIssuesProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("ListIssues")),
+			connect.WithClientOptions(opts...),
+		),
+		investigateIssue: connect.NewClient[v1.InvestigateIssueRequest, v1.InvestigateIssueResponse](
+			httpClient,
+			baseURL+WorkspaceServiceInvestigateIssueProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("InvestigateIssue")),
+			connect.WithClientOptions(opts...),
+		),
+		resolveIssue: connect.NewClient[v1.ResolveIssueRequest, v1.ResolveIssueResponse](
+			httpClient,
+			baseURL+WorkspaceServiceResolveIssueProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("ResolveIssue")),
+			connect.WithClientOptions(opts...),
+		),
+		closeIssue: connect.NewClient[v1.CloseIssueRequest, v1.CloseIssueResponse](
+			httpClient,
+			baseURL+WorkspaceServiceCloseIssueProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("CloseIssue")),
+			connect.WithClientOptions(opts...),
+		),
+		deleteIssue: connect.NewClient[v1.DeleteIssueRequest, v1.DeleteIssueResponse](
+			httpClient,
+			baseURL+WorkspaceServiceDeleteIssueProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("DeleteIssue")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // workspaceServiceClient implements WorkspaceServiceClient.
 type workspaceServiceClient struct {
+	createTask          *connect.Client[v1.CreateTaskRequest, v1.CreateTaskResponse]
+	getTask             *connect.Client[v1.GetTaskRequest, v1.GetTaskResponse]
+	listTasks           *connect.Client[v1.ListTasksRequest, v1.ListTasksResponse]
+	deleteTask          *connect.Client[v1.DeleteTaskRequest, v1.DeleteTaskResponse]
 	createTodo          *connect.Client[v1.CreateTodoRequest, v1.CreateTodoResponse]
 	getTodo             *connect.Client[v1.GetTodoRequest, v1.GetTodoResponse]
 	listTodos           *connect.Client[v1.ListTodosRequest, v1.ListTodosResponse]
@@ -197,6 +311,33 @@ type workspaceServiceClient struct {
 	startProgress       *connect.Client[v1.StartProgressRequest, v1.StartProgressResponse]
 	completeProgress    *connect.Client[v1.CompleteProgressRequest, v1.CompleteProgressResponse]
 	deleteProgress      *connect.Client[v1.DeleteProgressRequest, v1.DeleteProgressResponse]
+	createIssue         *connect.Client[v1.CreateIssueRequest, v1.CreateIssueResponse]
+	getIssue            *connect.Client[v1.GetIssueRequest, v1.GetIssueResponse]
+	listIssues          *connect.Client[v1.ListIssuesRequest, v1.ListIssuesResponse]
+	investigateIssue    *connect.Client[v1.InvestigateIssueRequest, v1.InvestigateIssueResponse]
+	resolveIssue        *connect.Client[v1.ResolveIssueRequest, v1.ResolveIssueResponse]
+	closeIssue          *connect.Client[v1.CloseIssueRequest, v1.CloseIssueResponse]
+	deleteIssue         *connect.Client[v1.DeleteIssueRequest, v1.DeleteIssueResponse]
+}
+
+// CreateTask calls workspace.v1.WorkspaceService.CreateTask.
+func (c *workspaceServiceClient) CreateTask(ctx context.Context, req *connect.Request[v1.CreateTaskRequest]) (*connect.Response[v1.CreateTaskResponse], error) {
+	return c.createTask.CallUnary(ctx, req)
+}
+
+// GetTask calls workspace.v1.WorkspaceService.GetTask.
+func (c *workspaceServiceClient) GetTask(ctx context.Context, req *connect.Request[v1.GetTaskRequest]) (*connect.Response[v1.GetTaskResponse], error) {
+	return c.getTask.CallUnary(ctx, req)
+}
+
+// ListTasks calls workspace.v1.WorkspaceService.ListTasks.
+func (c *workspaceServiceClient) ListTasks(ctx context.Context, req *connect.Request[v1.ListTasksRequest]) (*connect.Response[v1.ListTasksResponse], error) {
+	return c.listTasks.CallUnary(ctx, req)
+}
+
+// DeleteTask calls workspace.v1.WorkspaceService.DeleteTask.
+func (c *workspaceServiceClient) DeleteTask(ctx context.Context, req *connect.Request[v1.DeleteTaskRequest]) (*connect.Response[v1.DeleteTaskResponse], error) {
+	return c.deleteTask.CallUnary(ctx, req)
 }
 
 // CreateTodo calls workspace.v1.WorkspaceService.CreateTodo.
@@ -264,8 +405,47 @@ func (c *workspaceServiceClient) DeleteProgress(ctx context.Context, req *connec
 	return c.deleteProgress.CallUnary(ctx, req)
 }
 
+// CreateIssue calls workspace.v1.WorkspaceService.CreateIssue.
+func (c *workspaceServiceClient) CreateIssue(ctx context.Context, req *connect.Request[v1.CreateIssueRequest]) (*connect.Response[v1.CreateIssueResponse], error) {
+	return c.createIssue.CallUnary(ctx, req)
+}
+
+// GetIssue calls workspace.v1.WorkspaceService.GetIssue.
+func (c *workspaceServiceClient) GetIssue(ctx context.Context, req *connect.Request[v1.GetIssueRequest]) (*connect.Response[v1.GetIssueResponse], error) {
+	return c.getIssue.CallUnary(ctx, req)
+}
+
+// ListIssues calls workspace.v1.WorkspaceService.ListIssues.
+func (c *workspaceServiceClient) ListIssues(ctx context.Context, req *connect.Request[v1.ListIssuesRequest]) (*connect.Response[v1.ListIssuesResponse], error) {
+	return c.listIssues.CallUnary(ctx, req)
+}
+
+// InvestigateIssue calls workspace.v1.WorkspaceService.InvestigateIssue.
+func (c *workspaceServiceClient) InvestigateIssue(ctx context.Context, req *connect.Request[v1.InvestigateIssueRequest]) (*connect.Response[v1.InvestigateIssueResponse], error) {
+	return c.investigateIssue.CallUnary(ctx, req)
+}
+
+// ResolveIssue calls workspace.v1.WorkspaceService.ResolveIssue.
+func (c *workspaceServiceClient) ResolveIssue(ctx context.Context, req *connect.Request[v1.ResolveIssueRequest]) (*connect.Response[v1.ResolveIssueResponse], error) {
+	return c.resolveIssue.CallUnary(ctx, req)
+}
+
+// CloseIssue calls workspace.v1.WorkspaceService.CloseIssue.
+func (c *workspaceServiceClient) CloseIssue(ctx context.Context, req *connect.Request[v1.CloseIssueRequest]) (*connect.Response[v1.CloseIssueResponse], error) {
+	return c.closeIssue.CallUnary(ctx, req)
+}
+
+// DeleteIssue calls workspace.v1.WorkspaceService.DeleteIssue.
+func (c *workspaceServiceClient) DeleteIssue(ctx context.Context, req *connect.Request[v1.DeleteIssueRequest]) (*connect.Response[v1.DeleteIssueResponse], error) {
+	return c.deleteIssue.CallUnary(ctx, req)
+}
+
 // WorkspaceServiceHandler is an implementation of the workspace.v1.WorkspaceService service.
 type WorkspaceServiceHandler interface {
+	CreateTask(context.Context, *connect.Request[v1.CreateTaskRequest]) (*connect.Response[v1.CreateTaskResponse], error)
+	GetTask(context.Context, *connect.Request[v1.GetTaskRequest]) (*connect.Response[v1.GetTaskResponse], error)
+	ListTasks(context.Context, *connect.Request[v1.ListTasksRequest]) (*connect.Response[v1.ListTasksResponse], error)
+	DeleteTask(context.Context, *connect.Request[v1.DeleteTaskRequest]) (*connect.Response[v1.DeleteTaskResponse], error)
 	CreateTodo(context.Context, *connect.Request[v1.CreateTodoRequest]) (*connect.Response[v1.CreateTodoResponse], error)
 	GetTodo(context.Context, *connect.Request[v1.GetTodoRequest]) (*connect.Response[v1.GetTodoResponse], error)
 	ListTodos(context.Context, *connect.Request[v1.ListTodosRequest]) (*connect.Response[v1.ListTodosResponse], error)
@@ -279,6 +459,13 @@ type WorkspaceServiceHandler interface {
 	StartProgress(context.Context, *connect.Request[v1.StartProgressRequest]) (*connect.Response[v1.StartProgressResponse], error)
 	CompleteProgress(context.Context, *connect.Request[v1.CompleteProgressRequest]) (*connect.Response[v1.CompleteProgressResponse], error)
 	DeleteProgress(context.Context, *connect.Request[v1.DeleteProgressRequest]) (*connect.Response[v1.DeleteProgressResponse], error)
+	CreateIssue(context.Context, *connect.Request[v1.CreateIssueRequest]) (*connect.Response[v1.CreateIssueResponse], error)
+	GetIssue(context.Context, *connect.Request[v1.GetIssueRequest]) (*connect.Response[v1.GetIssueResponse], error)
+	ListIssues(context.Context, *connect.Request[v1.ListIssuesRequest]) (*connect.Response[v1.ListIssuesResponse], error)
+	InvestigateIssue(context.Context, *connect.Request[v1.InvestigateIssueRequest]) (*connect.Response[v1.InvestigateIssueResponse], error)
+	ResolveIssue(context.Context, *connect.Request[v1.ResolveIssueRequest]) (*connect.Response[v1.ResolveIssueResponse], error)
+	CloseIssue(context.Context, *connect.Request[v1.CloseIssueRequest]) (*connect.Response[v1.CloseIssueResponse], error)
+	DeleteIssue(context.Context, *connect.Request[v1.DeleteIssueRequest]) (*connect.Response[v1.DeleteIssueResponse], error)
 }
 
 // NewWorkspaceServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -288,6 +475,30 @@ type WorkspaceServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewWorkspaceServiceHandler(svc WorkspaceServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
 	workspaceServiceMethods := v1.File_workspace_v1_workspace_proto.Services().ByName("WorkspaceService").Methods()
+	workspaceServiceCreateTaskHandler := connect.NewUnaryHandler(
+		WorkspaceServiceCreateTaskProcedure,
+		svc.CreateTask,
+		connect.WithSchema(workspaceServiceMethods.ByName("CreateTask")),
+		connect.WithHandlerOptions(opts...),
+	)
+	workspaceServiceGetTaskHandler := connect.NewUnaryHandler(
+		WorkspaceServiceGetTaskProcedure,
+		svc.GetTask,
+		connect.WithSchema(workspaceServiceMethods.ByName("GetTask")),
+		connect.WithHandlerOptions(opts...),
+	)
+	workspaceServiceListTasksHandler := connect.NewUnaryHandler(
+		WorkspaceServiceListTasksProcedure,
+		svc.ListTasks,
+		connect.WithSchema(workspaceServiceMethods.ByName("ListTasks")),
+		connect.WithHandlerOptions(opts...),
+	)
+	workspaceServiceDeleteTaskHandler := connect.NewUnaryHandler(
+		WorkspaceServiceDeleteTaskProcedure,
+		svc.DeleteTask,
+		connect.WithSchema(workspaceServiceMethods.ByName("DeleteTask")),
+		connect.WithHandlerOptions(opts...),
+	)
 	workspaceServiceCreateTodoHandler := connect.NewUnaryHandler(
 		WorkspaceServiceCreateTodoProcedure,
 		svc.CreateTodo,
@@ -366,8 +577,58 @@ func NewWorkspaceServiceHandler(svc WorkspaceServiceHandler, opts ...connect.Han
 		connect.WithSchema(workspaceServiceMethods.ByName("DeleteProgress")),
 		connect.WithHandlerOptions(opts...),
 	)
+	workspaceServiceCreateIssueHandler := connect.NewUnaryHandler(
+		WorkspaceServiceCreateIssueProcedure,
+		svc.CreateIssue,
+		connect.WithSchema(workspaceServiceMethods.ByName("CreateIssue")),
+		connect.WithHandlerOptions(opts...),
+	)
+	workspaceServiceGetIssueHandler := connect.NewUnaryHandler(
+		WorkspaceServiceGetIssueProcedure,
+		svc.GetIssue,
+		connect.WithSchema(workspaceServiceMethods.ByName("GetIssue")),
+		connect.WithHandlerOptions(opts...),
+	)
+	workspaceServiceListIssuesHandler := connect.NewUnaryHandler(
+		WorkspaceServiceListIssuesProcedure,
+		svc.ListIssues,
+		connect.WithSchema(workspaceServiceMethods.ByName("ListIssues")),
+		connect.WithHandlerOptions(opts...),
+	)
+	workspaceServiceInvestigateIssueHandler := connect.NewUnaryHandler(
+		WorkspaceServiceInvestigateIssueProcedure,
+		svc.InvestigateIssue,
+		connect.WithSchema(workspaceServiceMethods.ByName("InvestigateIssue")),
+		connect.WithHandlerOptions(opts...),
+	)
+	workspaceServiceResolveIssueHandler := connect.NewUnaryHandler(
+		WorkspaceServiceResolveIssueProcedure,
+		svc.ResolveIssue,
+		connect.WithSchema(workspaceServiceMethods.ByName("ResolveIssue")),
+		connect.WithHandlerOptions(opts...),
+	)
+	workspaceServiceCloseIssueHandler := connect.NewUnaryHandler(
+		WorkspaceServiceCloseIssueProcedure,
+		svc.CloseIssue,
+		connect.WithSchema(workspaceServiceMethods.ByName("CloseIssue")),
+		connect.WithHandlerOptions(opts...),
+	)
+	workspaceServiceDeleteIssueHandler := connect.NewUnaryHandler(
+		WorkspaceServiceDeleteIssueProcedure,
+		svc.DeleteIssue,
+		connect.WithSchema(workspaceServiceMethods.ByName("DeleteIssue")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/workspace.v1.WorkspaceService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
+		case WorkspaceServiceCreateTaskProcedure:
+			workspaceServiceCreateTaskHandler.ServeHTTP(w, r)
+		case WorkspaceServiceGetTaskProcedure:
+			workspaceServiceGetTaskHandler.ServeHTTP(w, r)
+		case WorkspaceServiceListTasksProcedure:
+			workspaceServiceListTasksHandler.ServeHTTP(w, r)
+		case WorkspaceServiceDeleteTaskProcedure:
+			workspaceServiceDeleteTaskHandler.ServeHTTP(w, r)
 		case WorkspaceServiceCreateTodoProcedure:
 			workspaceServiceCreateTodoHandler.ServeHTTP(w, r)
 		case WorkspaceServiceGetTodoProcedure:
@@ -394,6 +655,20 @@ func NewWorkspaceServiceHandler(svc WorkspaceServiceHandler, opts ...connect.Han
 			workspaceServiceCompleteProgressHandler.ServeHTTP(w, r)
 		case WorkspaceServiceDeleteProgressProcedure:
 			workspaceServiceDeleteProgressHandler.ServeHTTP(w, r)
+		case WorkspaceServiceCreateIssueProcedure:
+			workspaceServiceCreateIssueHandler.ServeHTTP(w, r)
+		case WorkspaceServiceGetIssueProcedure:
+			workspaceServiceGetIssueHandler.ServeHTTP(w, r)
+		case WorkspaceServiceListIssuesProcedure:
+			workspaceServiceListIssuesHandler.ServeHTTP(w, r)
+		case WorkspaceServiceInvestigateIssueProcedure:
+			workspaceServiceInvestigateIssueHandler.ServeHTTP(w, r)
+		case WorkspaceServiceResolveIssueProcedure:
+			workspaceServiceResolveIssueHandler.ServeHTTP(w, r)
+		case WorkspaceServiceCloseIssueProcedure:
+			workspaceServiceCloseIssueHandler.ServeHTTP(w, r)
+		case WorkspaceServiceDeleteIssueProcedure:
+			workspaceServiceDeleteIssueHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -402,6 +677,22 @@ func NewWorkspaceServiceHandler(svc WorkspaceServiceHandler, opts ...connect.Han
 
 // UnimplementedWorkspaceServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedWorkspaceServiceHandler struct{}
+
+func (UnimplementedWorkspaceServiceHandler) CreateTask(context.Context, *connect.Request[v1.CreateTaskRequest]) (*connect.Response[v1.CreateTaskResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("workspace.v1.WorkspaceService.CreateTask is not implemented"))
+}
+
+func (UnimplementedWorkspaceServiceHandler) GetTask(context.Context, *connect.Request[v1.GetTaskRequest]) (*connect.Response[v1.GetTaskResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("workspace.v1.WorkspaceService.GetTask is not implemented"))
+}
+
+func (UnimplementedWorkspaceServiceHandler) ListTasks(context.Context, *connect.Request[v1.ListTasksRequest]) (*connect.Response[v1.ListTasksResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("workspace.v1.WorkspaceService.ListTasks is not implemented"))
+}
+
+func (UnimplementedWorkspaceServiceHandler) DeleteTask(context.Context, *connect.Request[v1.DeleteTaskRequest]) (*connect.Response[v1.DeleteTaskResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("workspace.v1.WorkspaceService.DeleteTask is not implemented"))
+}
 
 func (UnimplementedWorkspaceServiceHandler) CreateTodo(context.Context, *connect.Request[v1.CreateTodoRequest]) (*connect.Response[v1.CreateTodoResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("workspace.v1.WorkspaceService.CreateTodo is not implemented"))
@@ -453,4 +744,32 @@ func (UnimplementedWorkspaceServiceHandler) CompleteProgress(context.Context, *c
 
 func (UnimplementedWorkspaceServiceHandler) DeleteProgress(context.Context, *connect.Request[v1.DeleteProgressRequest]) (*connect.Response[v1.DeleteProgressResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("workspace.v1.WorkspaceService.DeleteProgress is not implemented"))
+}
+
+func (UnimplementedWorkspaceServiceHandler) CreateIssue(context.Context, *connect.Request[v1.CreateIssueRequest]) (*connect.Response[v1.CreateIssueResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("workspace.v1.WorkspaceService.CreateIssue is not implemented"))
+}
+
+func (UnimplementedWorkspaceServiceHandler) GetIssue(context.Context, *connect.Request[v1.GetIssueRequest]) (*connect.Response[v1.GetIssueResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("workspace.v1.WorkspaceService.GetIssue is not implemented"))
+}
+
+func (UnimplementedWorkspaceServiceHandler) ListIssues(context.Context, *connect.Request[v1.ListIssuesRequest]) (*connect.Response[v1.ListIssuesResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("workspace.v1.WorkspaceService.ListIssues is not implemented"))
+}
+
+func (UnimplementedWorkspaceServiceHandler) InvestigateIssue(context.Context, *connect.Request[v1.InvestigateIssueRequest]) (*connect.Response[v1.InvestigateIssueResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("workspace.v1.WorkspaceService.InvestigateIssue is not implemented"))
+}
+
+func (UnimplementedWorkspaceServiceHandler) ResolveIssue(context.Context, *connect.Request[v1.ResolveIssueRequest]) (*connect.Response[v1.ResolveIssueResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("workspace.v1.WorkspaceService.ResolveIssue is not implemented"))
+}
+
+func (UnimplementedWorkspaceServiceHandler) CloseIssue(context.Context, *connect.Request[v1.CloseIssueRequest]) (*connect.Response[v1.CloseIssueResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("workspace.v1.WorkspaceService.CloseIssue is not implemented"))
+}
+
+func (UnimplementedWorkspaceServiceHandler) DeleteIssue(context.Context, *connect.Request[v1.DeleteIssueRequest]) (*connect.Response[v1.DeleteIssueResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("workspace.v1.WorkspaceService.DeleteIssue is not implemented"))
 }

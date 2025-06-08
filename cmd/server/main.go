@@ -26,9 +26,16 @@ func main() {
 	defer db.Close()
 
 	todoRepository := persistence.NewMySqlTodoRepository(db)
+	progressRepository := persistence.NewMySqlProgressRepository(db)
+	issueRepository := persistence.NewMySqlIssueRepository(db)
+
 	todoUsecase := usecase.NewTodoUseCase(todoRepository)
+	progressUsecase := usecase.NewProgressUseCase(progressRepository)
+	issueUsecase := usecase.NewIssueUseCase(issueRepository)
 	workspace := &controller.WorkSpaceController{
-		TodoUsecase: todoUsecase,
+		TodoUsecase:     todoUsecase,
+		ProgressUsecase: progressUsecase,
+		IssueUsecase:    issueUsecase,
 	}
 	mux := http.NewServeMux()
 	path, handler := workspacev1connect.NewWorkspaceServiceHandler(workspace)

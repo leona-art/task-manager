@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/leona-art/task-manager/internal/adaptor/gateway"
@@ -18,43 +19,43 @@ func NewIssueUseCase(repository gateway.IssueRepository) *IssueUseCase {
 	}
 }
 
-func (uc *IssueUseCase) CreateIssue(title, description string) (*issue.IssueTask, error) {
+func (uc *IssueUseCase) CreateIssue(ctx context.Context, title, description string) (*issue.IssueTask, error) {
 	issueTask, err := issue.NewIssueTask(title, description)
 	if err != nil {
 		return nil, err
 	}
-	if err := uc.repository.Create(*issueTask); err != nil {
+	if err := uc.repository.Create(ctx, *issueTask); err != nil {
 		return nil, err
 	}
 	return issueTask, nil
 }
 
-func (uc *IssueUseCase) GetIssueByID(id string) (*issue.IssueTask, bool, error) {
+func (uc *IssueUseCase) GetIssueByID(ctx context.Context, id string) (*issue.IssueTask, bool, error) {
 	taskId, err := task.NewTaskIdFromString(id)
 	if err != nil {
 		return nil, false, err
 	}
-	issueTask, ok, err := uc.repository.Get(taskId)
+	issueTask, ok, err := uc.repository.Get(ctx, taskId)
 	if err != nil {
 		return nil, false, err
 	}
 	return &issueTask, ok, nil
 }
 
-func (uc *IssueUseCase) ListIssues() ([]issue.IssueTask, error) {
-	issueTasks, err := uc.repository.List()
+func (uc *IssueUseCase) ListIssues(ctx context.Context) ([]issue.IssueTask, error) {
+	issueTasks, err := uc.repository.List(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return issueTasks, nil
 }
 
-func (uc *IssueUseCase) InvestigateIssue(id string) (*issue.IssueTask, error) {
+func (uc *IssueUseCase) InvestigateIssue(ctx context.Context, id string) (*issue.IssueTask, error) {
 	taskId, err := task.NewTaskIdFromString(id)
 	if err != nil {
 		return nil, err
 	}
-	issueTask, ok, err := uc.repository.Get(taskId)
+	issueTask, ok, err := uc.repository.Get(ctx, taskId)
 	if err != nil {
 		return nil, err
 	}
@@ -65,18 +66,18 @@ func (uc *IssueUseCase) InvestigateIssue(id string) (*issue.IssueTask, error) {
 	if err := issueTask.Investigate(); err != nil {
 		return nil, err
 	}
-	if err := uc.repository.Save(issueTask); err != nil {
+	if err := uc.repository.Save(ctx, issueTask); err != nil {
 		return nil, err
 	}
 	return &issueTask, nil
 }
 
-func (uc *IssueUseCase) ResolveIssue(id string) (*issue.IssueTask, error) {
+func (uc *IssueUseCase) ResolveIssue(ctx context.Context, id string) (*issue.IssueTask, error) {
 	taskId, err := task.NewTaskIdFromString(id)
 	if err != nil {
 		return nil, err
 	}
-	issueTask, ok, err := uc.repository.Get(taskId)
+	issueTask, ok, err := uc.repository.Get(ctx, taskId)
 	if err != nil {
 		return nil, err
 	}
@@ -87,18 +88,18 @@ func (uc *IssueUseCase) ResolveIssue(id string) (*issue.IssueTask, error) {
 	if err := issueTask.Resolve(); err != nil {
 		return nil, err
 	}
-	if err := uc.repository.Save(issueTask); err != nil {
+	if err := uc.repository.Save(ctx, issueTask); err != nil {
 		return nil, err
 	}
 	return &issueTask, nil
 }
 
-func (uc *IssueUseCase) CloseIssue(id string) (issue.IssueTask, error) {
+func (uc *IssueUseCase) CloseIssue(ctx context.Context, id string) (issue.IssueTask, error) {
 	taskId, err := task.NewTaskIdFromString(id)
 	if err != nil {
 		return issue.IssueTask{}, err
 	}
-	issueTask, ok, err := uc.repository.Get(taskId)
+	issueTask, ok, err := uc.repository.Get(ctx, taskId)
 	if err != nil {
 		return issue.IssueTask{}, err
 	}
@@ -109,18 +110,18 @@ func (uc *IssueUseCase) CloseIssue(id string) (issue.IssueTask, error) {
 	if err := issueTask.Close(); err != nil {
 		return issue.IssueTask{}, err
 	}
-	if err := uc.repository.Save(issueTask); err != nil {
+	if err := uc.repository.Save(ctx, issueTask); err != nil {
 		return issue.IssueTask{}, err
 	}
 	return issueTask, nil
 }
 
-func (uc *IssueUseCase) SetCause(id string, cause string) (issue.IssueTask, error) {
+func (uc *IssueUseCase) SetCause(ctx context.Context, id string, cause string) (issue.IssueTask, error) {
 	taskId, err := task.NewTaskIdFromString(id)
 	if err != nil {
 		return issue.IssueTask{}, err
 	}
-	issueTask, ok, err := uc.repository.Get(taskId)
+	issueTask, ok, err := uc.repository.Get(ctx, taskId)
 	if err != nil {
 		return issue.IssueTask{}, err
 	}
@@ -131,18 +132,18 @@ func (uc *IssueUseCase) SetCause(id string, cause string) (issue.IssueTask, erro
 	if err := issueTask.SetCause(cause); err != nil {
 		return issue.IssueTask{}, err
 	}
-	if err := uc.repository.Save(issueTask); err != nil {
+	if err := uc.repository.Save(ctx, issueTask); err != nil {
 		return issue.IssueTask{}, err
 	}
 	return issueTask, nil
 }
 
-func (uc *IssueUseCase) SetSolution(id string, solution string) (issue.IssueTask, error) {
+func (uc *IssueUseCase) SetSolution(ctx context.Context, id string, solution string) (issue.IssueTask, error) {
 	taskId, err := task.NewTaskIdFromString(id)
 	if err != nil {
 		return issue.IssueTask{}, err
 	}
-	issueTask, ok, err := uc.repository.Get(taskId)
+	issueTask, ok, err := uc.repository.Get(ctx, taskId)
 	if err != nil {
 		return issue.IssueTask{}, err
 	}
@@ -153,18 +154,18 @@ func (uc *IssueUseCase) SetSolution(id string, solution string) (issue.IssueTask
 	if err := issueTask.SetSolution(solution); err != nil {
 		return issue.IssueTask{}, err
 	}
-	if err := uc.repository.Save(issueTask); err != nil {
+	if err := uc.repository.Save(ctx, issueTask); err != nil {
 		return issue.IssueTask{}, err
 	}
 	return issueTask, nil
 }
 
-func (uc *IssueUseCase) DeleteIssue(id string) (bool, error) {
+func (uc *IssueUseCase) DeleteIssue(ctx context.Context, id string) (bool, error) {
 	taskId, err := task.NewTaskIdFromString(id)
 	if err != nil {
 		return false, err
 	}
-	ok, err := uc.repository.Delete(taskId)
+	ok, err := uc.repository.Delete(ctx, taskId)
 	if err != nil {
 		return false, err
 	}

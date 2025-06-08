@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+package workspace.v1;
+
+option go_package = "github.com/leona-art/task-manager/gen/workspace/v1;workspacev1";
+
+import "google/protobuf/timestamp.proto";
+
+message IssueOpenState {}
+
+message IssueInvestigatingState {
+  optional string cause = 1; // Optional solution for the issue
+}
+message IssueResolvingState {
+    string cause = 1; // Message indicating resolution
+    optional string solution = 2; // Message indicating resolution
+}
+
+message IssueClosedState {
+    string cause = 1; // Message indicating closure
+    string solution = 2; // Message indicating closure
+}
+
+message Issue {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  oneof state {
+    IssueOpenState open = 4;
+    IssueInvestigatingState investigating = 5;
+    IssueResolvingState resolution = 6;
+    IssueClosedState closed = 7;
+  }
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
+}
+
+// --------------
+
+message CreateIssueRequest {
+  string title = 1;
+  string description = 2;
+}
+message CreateIssueResponse {
+  Issue issue = 1;
+}
+
+message GetIssueRequest {
+  string id = 1;
+}
+message GetIssueResponse {
+  Issue issue = 1;
+}
+
+message ListIssuesRequest {}
+message ListIssuesResponse {
+  repeated Issue issues = 1;
+}
+
+message InvestigateIssueRequest {
+  string id = 1;
+}
+message InvestigateIssueResponse {
+  Issue issue = 1;
+}
+message ResolveIssueRequest {
+  string id = 1;
+}
+message ResolveIssueResponse {
+  Issue issue = 1;
+}
+
+message CloseIssueRequest {
+  string id = 1;
+}
+message CloseIssueResponse {
+  Issue issue = 1;
+}
+
+message SetIssueCauseRequest {
+  string id = 1;
+  string cause = 2;
+}
+message SetIssueCauseResponse {
+  Issue issue = 1;
+}
+
+message SetIssueSolutionRequest {
+  string id = 1;
+  string solution = 2;
+}
+message SetIssueSolutionResponse {
+  Issue issue = 1;
+}
+
+message DeleteIssueRequest {
+  string id = 1;
+}
+message DeleteIssueResponse {
+  Issue issue = 1;
+}

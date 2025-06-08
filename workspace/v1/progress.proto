@@ -28,9 +28,13 @@ message Progress {
   string id = 1;
   string title = 2;
   string description = 3;
-  ProgressState state = 4;
-  google.protobuf.Timestamp created_at = 5;
-  google.protobuf.Timestamp updated_at = 6;
+  oneof state  {
+    ProgressNotStartedState not_started = 4;
+    ProgressInProgressState in_progress = 5;
+    ProgressCompletedState completed = 6;
+  }
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
 }
 
 // --------------

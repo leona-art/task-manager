@@ -245,13 +245,18 @@ func (*ProgressState_InProgress) isProgressState_State() {}
 func (*ProgressState_Completed) isProgressState_State() {}
 
 type Progress struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
-	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
-	State         *ProgressState         `protobuf:"bytes,4,opt,name=state,proto3" json:"state,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	state       protoimpl.MessageState `protogen:"open.v1"`
+	Id          string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Title       string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	Description string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	// Types that are valid to be assigned to State:
+	//
+	//	*Progress_NotStarted
+	//	*Progress_InProgress
+	//	*Progress_Completed
+	State         isProgress_State       `protobuf_oneof:"state"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -307,9 +312,36 @@ func (x *Progress) GetDescription() string {
 	return ""
 }
 
-func (x *Progress) GetState() *ProgressState {
+func (x *Progress) GetState() isProgress_State {
 	if x != nil {
 		return x.State
+	}
+	return nil
+}
+
+func (x *Progress) GetNotStarted() *ProgressNotStartedState {
+	if x != nil {
+		if x, ok := x.State.(*Progress_NotStarted); ok {
+			return x.NotStarted
+		}
+	}
+	return nil
+}
+
+func (x *Progress) GetInProgress() *ProgressInProgressState {
+	if x != nil {
+		if x, ok := x.State.(*Progress_InProgress); ok {
+			return x.InProgress
+		}
+	}
+	return nil
+}
+
+func (x *Progress) GetCompleted() *ProgressCompletedState {
+	if x != nil {
+		if x, ok := x.State.(*Progress_Completed); ok {
+			return x.Completed
+		}
 	}
 	return nil
 }
@@ -327,6 +359,28 @@ func (x *Progress) GetUpdatedAt() *timestamppb.Timestamp {
 	}
 	return nil
 }
+
+type isProgress_State interface {
+	isProgress_State()
+}
+
+type Progress_NotStarted struct {
+	NotStarted *ProgressNotStartedState `protobuf:"bytes,4,opt,name=not_started,json=notStarted,proto3,oneof"`
+}
+
+type Progress_InProgress struct {
+	InProgress *ProgressInProgressState `protobuf:"bytes,5,opt,name=in_progress,json=inProgress,proto3,oneof"`
+}
+
+type Progress_Completed struct {
+	Completed *ProgressCompletedState `protobuf:"bytes,6,opt,name=completed,proto3,oneof"`
+}
+
+func (*Progress_NotStarted) isProgress_State() {}
+
+func (*Progress_InProgress) isProgress_State() {}
+
+func (*Progress_Completed) isProgress_State() {}
 
 type CreateProgressRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -961,16 +1015,21 @@ const file_workspace_v1_progress_proto_rawDesc = "" +
 	"\vin_progress\x18\x02 \x01(\v2%.workspace.v1.ProgressInProgressStateH\x00R\n" +
 	"inProgress\x12D\n" +
 	"\tcompleted\x18\x03 \x01(\v2$.workspace.v1.ProgressCompletedStateH\x00R\tcompletedB\a\n" +
-	"\x05state\"\xfb\x01\n" +
+	"\x05state\"\xab\x03\n" +
 	"\bProgress\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12 \n" +
-	"\vdescription\x18\x03 \x01(\tR\vdescription\x121\n" +
-	"\x05state\x18\x04 \x01(\v2\x1b.workspace.v1.ProgressStateR\x05state\x129\n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\x12H\n" +
+	"\vnot_started\x18\x04 \x01(\v2%.workspace.v1.ProgressNotStartedStateH\x00R\n" +
+	"notStarted\x12H\n" +
+	"\vin_progress\x18\x05 \x01(\v2%.workspace.v1.ProgressInProgressStateH\x00R\n" +
+	"inProgress\x12D\n" +
+	"\tcompleted\x18\x06 \x01(\v2$.workspace.v1.ProgressCompletedStateH\x00R\tcompleted\x129\n" +
 	"\n" +
-	"created_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"O\n" +
+	"updated_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAtB\a\n" +
+	"\x05state\"O\n" +
 	"\x15CreateProgressRequest\x12\x14\n" +
 	"\x05title\x18\x01 \x01(\tR\x05title\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\"L\n" +
@@ -1041,20 +1100,22 @@ var file_workspace_v1_progress_proto_depIdxs = []int32{
 	0,  // 0: workspace.v1.ProgressState.not_started:type_name -> workspace.v1.ProgressNotStartedState
 	1,  // 1: workspace.v1.ProgressState.in_progress:type_name -> workspace.v1.ProgressInProgressState
 	2,  // 2: workspace.v1.ProgressState.completed:type_name -> workspace.v1.ProgressCompletedState
-	3,  // 3: workspace.v1.Progress.state:type_name -> workspace.v1.ProgressState
-	19, // 4: workspace.v1.Progress.created_at:type_name -> google.protobuf.Timestamp
-	19, // 5: workspace.v1.Progress.updated_at:type_name -> google.protobuf.Timestamp
-	4,  // 6: workspace.v1.CreateProgressResponse.progress:type_name -> workspace.v1.Progress
-	4,  // 7: workspace.v1.GetProgressResponse.progress:type_name -> workspace.v1.Progress
-	4,  // 8: workspace.v1.ListProgressesResponse.progresses:type_name -> workspace.v1.Progress
-	4,  // 9: workspace.v1.SetProgressSolutionResponse.progress:type_name -> workspace.v1.Progress
-	4,  // 10: workspace.v1.StartProgressResponse.progress:type_name -> workspace.v1.Progress
-	4,  // 11: workspace.v1.CompleteProgressResponse.progress:type_name -> workspace.v1.Progress
-	12, // [12:12] is the sub-list for method output_type
-	12, // [12:12] is the sub-list for method input_type
-	12, // [12:12] is the sub-list for extension type_name
-	12, // [12:12] is the sub-list for extension extendee
-	0,  // [0:12] is the sub-list for field type_name
+	0,  // 3: workspace.v1.Progress.not_started:type_name -> workspace.v1.ProgressNotStartedState
+	1,  // 4: workspace.v1.Progress.in_progress:type_name -> workspace.v1.ProgressInProgressState
+	2,  // 5: workspace.v1.Progress.completed:type_name -> workspace.v1.ProgressCompletedState
+	19, // 6: workspace.v1.Progress.created_at:type_name -> google.protobuf.Timestamp
+	19, // 7: workspace.v1.Progress.updated_at:type_name -> google.protobuf.Timestamp
+	4,  // 8: workspace.v1.CreateProgressResponse.progress:type_name -> workspace.v1.Progress
+	4,  // 9: workspace.v1.GetProgressResponse.progress:type_name -> workspace.v1.Progress
+	4,  // 10: workspace.v1.ListProgressesResponse.progresses:type_name -> workspace.v1.Progress
+	4,  // 11: workspace.v1.SetProgressSolutionResponse.progress:type_name -> workspace.v1.Progress
+	4,  // 12: workspace.v1.StartProgressResponse.progress:type_name -> workspace.v1.Progress
+	4,  // 13: workspace.v1.CompleteProgressResponse.progress:type_name -> workspace.v1.Progress
+	14, // [14:14] is the sub-list for method output_type
+	14, // [14:14] is the sub-list for method input_type
+	14, // [14:14] is the sub-list for extension type_name
+	14, // [14:14] is the sub-list for extension extendee
+	0,  // [0:14] is the sub-list for field type_name
 }
 
 func init() { file_workspace_v1_progress_proto_init() }
@@ -1067,6 +1128,11 @@ func file_workspace_v1_progress_proto_init() {
 		(*ProgressState_NotStarted)(nil),
 		(*ProgressState_InProgress)(nil),
 		(*ProgressState_Completed)(nil),
+	}
+	file_workspace_v1_progress_proto_msgTypes[4].OneofWrappers = []any{
+		(*Progress_NotStarted)(nil),
+		(*Progress_InProgress)(nil),
+		(*Progress_Completed)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
