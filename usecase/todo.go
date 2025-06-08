@@ -4,15 +4,16 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/leona-art/task-manager/adaptor/gateway"
 	"github.com/leona-art/task-manager/domain/entity/task"
 	"github.com/leona-art/task-manager/domain/entity/todo"
 )
 
 type TodoUseCase struct {
-	repository todo.TodoRepository
+	repository gateway.TodoRepository
 }
 
-func NewTodoUseCase(repository todo.TodoRepository) *TodoUseCase {
+func NewTodoUseCase(repository gateway.TodoRepository) *TodoUseCase {
 	return &TodoUseCase{
 		repository: repository,
 	}

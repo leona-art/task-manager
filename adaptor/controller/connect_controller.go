@@ -6,9 +6,10 @@ import (
 	"log/slog"
 
 	"connectrpc.com/connect"
-	"github.com/leona-art/task-manager/adaptor"
+	"github.com/leona-art/task-manager/domain/entity/todo"
 	workspacev1 "github.com/leona-art/task-manager/gen/workspace/v1"
 	"github.com/leona-art/task-manager/usecase"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type WorkSpaceController struct {
@@ -23,9 +24,9 @@ func (w *WorkSpaceController) CreateTodo(ctx context.Context, req *connect.Reque
 		slog.Error("failed to create todo", "error", err)
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
-	dto := adaptor.ToTodoDTO(t)
+	pbTodo := toPbTodo(&t)
 	return connect.NewResponse(&workspacev1.CreateTodoResponse{
-		Todo: dto,
+		Todo: pbTodo,
 	}), nil
 }
 
@@ -35,9 +36,9 @@ func (w *WorkSpaceController) DoTodo(ctx context.Context, req *connect.Request[w
 	if err != nil {
 		return nil, connect.NewError(connect.CodeInternal, fmt.Errorf("failed to do todo: %w", err))
 	}
-	dto := adaptor.ToTodoDTO(t)
+	pbTodo := toPbTodo(&t)
 	return connect.NewResponse(&workspacev1.DoTodoResponse{
-		Todo: dto,
+		Todo: pbTodo,
 	}), nil
 }
 
@@ -50,9 +51,9 @@ func (w *WorkSpaceController) GetTodo(ctx context.Context, req *connect.Request[
 	if !ok {
 		return nil, connect.NewError(connect.CodeNotFound, fmt.Errorf("todo with id %s not found", req.Msg.Id))
 	}
-	dto := adaptor.ToTodoDTO(t)
+	pbTodo := toPbTodo(&t)
 	return connect.NewResponse(&workspacev1.GetTodoResponse{
-		Todo: dto,
+		Todo: pbTodo,
 	}), nil
 }
 
@@ -62,12 +63,12 @@ func (w *WorkSpaceController) ListTodos(ctx context.Context, req *connect.Reques
 	if err != nil {
 		return nil, connect.NewError(connect.CodeInternal, fmt.Errorf("failed to list todos: %w", err))
 	}
-	dtos := make([]*workspacev1.Todo, len(todos))
+	pbTodos := make([]*workspacev1.Todo, len(todos))
 	for i, t := range todos {
-		dtos[i] = adaptor.ToTodoDTO(t)
+		pbTodos[i] = toPbTodo(&t)
 	}
 	return connect.NewResponse(&workspacev1.ListTodosResponse{
-		Todos: dtos,
+		Todos: pbTodos,
 	}), nil
 }
 
@@ -77,8 +78,44 @@ func (w *WorkSpaceController) UndoneTodo(ctx context.Context, req *connect.Reque
 	if err != nil {
 		return nil, connect.NewError(connect.CodeInternal, fmt.Errorf("failed to undone todo: %w", err))
 	}
-	dto := adaptor.ToTodoDTO(t)
+	pbTodo := toPbTodo(&t)
 	return connect.NewResponse(&workspacev1.UndoneTodoResponse{
-		Todo: dto,
+		Todo: pbTodo,
 	}), nil
+}
+
+func toDomainTodo(todoPb *workspacev1.Todo) (*todo.TodoTask, error) {
+	if todoPb == nil {
+		return nil, fmt.Errorf("todo cannot be nil")
+	}
+	todoDTO := todo.TodoTaskDto{
+		ID:          todoPb.Id,
+		Title:       todoPb.Title,
+		Description: todoPb.Description,
+		CreatedAt:   todoPb.CreatedAt.AsTime(),
+		UpdatedAt:   todoPb.UpdatedAt.AsTime(),
+		Status:      todoPb.Status.String(),
+	}
+	t, err := todo.NewTodoTaskFromDto(todoDTO)
+	if err != nil {
+		return nil, fmt.Errorf("failed to convert todo to domain: %w", err)
+	}
+	return &t, nil
+}
+
+func toPbTodo(t *todo.TodoTask) (pb *workspacev1.Todo) {
+	pb = &workspacev1.Todo{}
+	pb.Id = t.Data().ID.String()
+	pb.Title = t.Data().Title
+	pb.Description = t.Data().Description
+	pb.CreatedAt = timestamppb.New(t.Data().CreatedAt)
+	pb.UpdatedAt = timestamppb.New(t.Data().UpdatedAt)
+
+	switch t.State().Status() {
+	case todo.Done:
+		pb.Status = workspacev1.TodoStatus_TODO_STATUS_DONE
+	case todo.Pending:
+		pb.Status = workspacev1.TodoStatus_TODO_STATUS_PENDING
+	}
+	return
 }

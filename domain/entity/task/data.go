@@ -38,3 +38,11 @@ func (t *TaskEntity) Update() {
 func (t *TaskEntity) IsEmpty() bool {
 	return t.ID.IsEmpty() && t.Title == "" && t.Description == "" && t.CreatedAt.IsZero() && t.UpdatedAt.IsZero()
 }
+
+func (t *TaskEntity) IsValid() bool {
+	return !t.ID.IsEmpty() &&
+		t.Title != "" &&
+		!t.CreatedAt.IsZero() &&
+		!t.UpdatedAt.IsZero() &&
+		t.UpdatedAt.After(t.CreatedAt)
+}
