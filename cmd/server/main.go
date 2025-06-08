@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/leona-art/task-manager/adaptor/controller"
 	"github.com/leona-art/task-manager/gen/workspace/v1/workspacev1connect"
-	"github.com/leona-art/task-manager/infra/persistence"
-	"github.com/leona-art/task-manager/usecase"
+	"github.com/leona-art/task-manager/internal/adaptor/controller"
+	"github.com/leona-art/task-manager/internal/infra/persistence"
+	"github.com/leona-art/task-manager/internal/usecase"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 

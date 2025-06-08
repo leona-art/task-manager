@@ -1,8 +1,8 @@
 package gateway
 
 import (
-	"github.com/leona-art/task-manager/domain/entity/progress"
-	"github.com/leona-art/task-manager/domain/entity/task"
+	"github.com/leona-art/task-manager/internal/domain/entity/progress"
+	"github.com/leona-art/task-manager/internal/domain/entity/task"
 )
 
 type ProgressRepository interface {

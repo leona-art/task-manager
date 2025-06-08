@@ -1,15 +1,16 @@
 package usecase
 
 import (
-	"github.com/leona-art/task-manager/domain/entity/progress"
-	"github.com/leona-art/task-manager/domain/entity/task"
+	"github.com/leona-art/task-manager/internal/adaptor/gateway"
+	"github.com/leona-art/task-manager/internal/domain/entity/progress"
+	"github.com/leona-art/task-manager/internal/domain/entity/task"
 )
 
 type ProgressUseCase struct {
-	repository progress.ProgressRepository
+	repository gateway.ProgressRepository
 }
 
-func NewProgressUseCase(repository progress.ProgressRepository) *ProgressUseCase {
+func NewProgressUseCase(repository gateway.ProgressRepository) *ProgressUseCase {
 	return &ProgressUseCase{
 		repository: repository,
 	}

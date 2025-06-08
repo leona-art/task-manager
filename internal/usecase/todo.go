@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log/slog"
 
-	"github.com/leona-art/task-manager/adaptor/gateway"
-	"github.com/leona-art/task-manager/domain/entity/task"
-	"github.com/leona-art/task-manager/domain/entity/todo"
+	"github.com/leona-art/task-manager/internal/adaptor/gateway"
+	"github.com/leona-art/task-manager/internal/domain/entity/task"
+	"github.com/leona-art/task-manager/internal/domain/entity/todo"
 )
 
 type TodoUseCase struct {

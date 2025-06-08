@@ -3,7 +3,7 @@ package issue
 import (
 	"fmt"
 
-	"github.com/leona-art/task-manager/domain/entity/task"
+	"github.com/leona-art/task-manager/internal/domain/entity/task"
 )
 
 type IssueTask struct {

@@ -3,8 +3,8 @@ package gateway
 import (
 	"context"
 
-	"github.com/leona-art/task-manager/domain/entity/task"
-	"github.com/leona-art/task-manager/domain/entity/todo"
+	"github.com/leona-art/task-manager/internal/domain/entity/task"
+	"github.com/leona-art/task-manager/internal/domain/entity/todo"
 )
 
 type TodoRepository interface {

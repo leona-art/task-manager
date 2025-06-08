@@ -1,24 +1,25 @@
-package mysql_repository
+package persistence
 
 import (
 	"context"
 	"fmt"
 
-	"github.com/leona-art/task-manager/domain/entity/task"
-	"github.com/leona-art/task-manager/domain/entity/todo"
 	"github.com/leona-art/task-manager/gen/infra/sqlc"
+	"github.com/leona-art/task-manager/internal/domain/entity/task"
+	"github.com/leona-art/task-manager/internal/domain/entity/todo"
 )
 
-type MySqlTodoRepository struct {
+type TodoMySqlRepository struct {
 	queries *sqlc.Queries
 }
 
-func NewMySqlTodoRepository(conn sqlc.DBTX) *MySqlTodoRepository {
-	return &MySqlTodoRepository{
+func NewMySqlTodoRepository(conn sqlc.DBTX) *TodoMySqlRepository {
+	return &TodoMySqlRepository{
 		queries: sqlc.New(conn),
 	}
 }
-func (r *MySqlTodoRepository) Create(ctx context.Context, t todo.TodoTask) error {
+func (r *TodoMySqlRepository) Create(ctx context.Context, t todo.TodoTask) error {
+
 	err := r.queries.CreateTask(ctx, sqlc.CreateTaskParams{
 		ID:          t.Data().ID.String(),
 		Title:       t.Data().Title,
@@ -49,7 +50,7 @@ func (r *MySqlTodoRepository) Create(ctx context.Context, t todo.TodoTask) error
 	return nil
 }
 
-func (r *MySqlTodoRepository) Get(ctx context.Context, id task.TaskId) (todo.TodoTask, bool, error) {
+func (r *TodoMySqlRepository) Get(ctx context.Context, id task.TaskId) (todo.TodoTask, bool, error) {
 	task, err := r.queries.GetTodoTask(ctx, id.String())
 	if err != nil {
 		return todo.TodoTask{}, false, err
@@ -70,7 +71,7 @@ func (r *MySqlTodoRepository) Get(ctx context.Context, id task.TaskId) (todo.Tod
 	return todoTask, true, nil
 }
 
-func (r *MySqlTodoRepository) Save(ctx context.Context, t todo.TodoTask) error {
+func (r *TodoMySqlRepository) Save(ctx context.Context, t todo.TodoTask) error {
 	err := r.queries.UpdateTask(ctx, sqlc.UpdateTaskParams{
 		ID:          t.Data().ID.String(),
 		Title:       t.Data().Title,
@@ -100,7 +101,7 @@ func (r *MySqlTodoRepository) Save(ctx context.Context, t todo.TodoTask) error {
 	return nil
 }
 
-func (r *MySqlTodoRepository) Delete(ctx context.Context, id task.TaskId) (bool, error) {
+func (r *TodoMySqlRepository) Delete(ctx context.Context, id task.TaskId) (bool, error) {
 	err := r.queries.DeleteTodoTask(ctx, id.String())
 	if err != nil {
 		return false, err
@@ -112,7 +113,7 @@ func (r *MySqlTodoRepository) Delete(ctx context.Context, id task.TaskId) (bool,
 	return true, nil
 }
 
-func (r *MySqlTodoRepository) List(ctx context.Context) ([]todo.TodoTask, error) {
+func (r *TodoMySqlRepository) List(ctx context.Context) ([]todo.TodoTask, error) {
 	tasks, err := r.queries.ListTodoTasks(ctx)
 	if err != nil {
 		return nil, err

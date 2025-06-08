@@ -6,9 +6,9 @@ import (
 	"log/slog"
 
 	"connectrpc.com/connect"
-	"github.com/leona-art/task-manager/domain/entity/todo"
 	workspacev1 "github.com/leona-art/task-manager/gen/workspace/v1"
-	"github.com/leona-art/task-manager/usecase"
+	"github.com/leona-art/task-manager/internal/domain/entity/todo"
+	"github.com/leona-art/task-manager/internal/usecase"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

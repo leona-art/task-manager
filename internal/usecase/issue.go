@@ -3,15 +3,16 @@ package usecase
 import (
 	"fmt"
 
-	"github.com/leona-art/task-manager/domain/entity/issue"
-	"github.com/leona-art/task-manager/domain/entity/task"
+	"github.com/leona-art/task-manager/internal/adaptor/gateway"
+	"github.com/leona-art/task-manager/internal/domain/entity/issue"
+	"github.com/leona-art/task-manager/internal/domain/entity/task"
 )
 
 type IssueUseCase struct {
-	repository issue.IssueRepository
+	repository gateway.IssueRepository
 }
 
-func NewIssueUseCase(repository issue.IssueRepository) *IssueUseCase {
+func NewIssueUseCase(repository gateway.IssueRepository) *IssueUseCase {
 	return &IssueUseCase{
 		repository: repository,
 	}
