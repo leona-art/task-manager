@@ -1,6 +1,6 @@
 package issue
 
-import "github.com/leona-art/task-manager/utils"
+import "github.com/leona-art/task-manager/internal/utils"
 
 type ResolvingState struct {
 	cause    string

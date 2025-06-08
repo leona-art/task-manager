@@ -1,6 +1,6 @@
 package progress
 
-import "github.com/leona-art/task-manager/utils"
+import "github.com/leona-art/task-manager/internal/utils"
 
 type InProgressState struct {
 	solution utils.Option[string]
