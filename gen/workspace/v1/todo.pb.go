@@ -155,6 +155,7 @@ func (x *Todo) GetUpdatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+// Todoを作成するリクエストとレスポンス
 type CreateTodoRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Title         string                 `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
@@ -251,6 +252,7 @@ func (x *CreateTodoResponse) GetTodo() *Todo {
 	return nil
 }
 
+// Todoを取得するリクエストとレスポンス
 type GetTodoRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -339,6 +341,7 @@ func (x *GetTodoResponse) GetTodo() *Todo {
 	return nil
 }
 
+// Todoの一覧を取得するリクエストとレスポンス
 type ListTodosRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -419,6 +422,7 @@ func (x *ListTodosResponse) GetTodos() []*Todo {
 	return nil
 }
 
+// Todoの状態を変更するリクエストとレスポンス
 type DoTodoRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -507,6 +511,7 @@ func (x *DoTodoResponse) GetTodo() *Todo {
 	return nil
 }
 
+// Todoの状態を未完了に戻すリクエストとレスポンス
 type UndoneTodoRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -595,6 +600,87 @@ func (x *UndoneTodoResponse) GetTodo() *Todo {
 	return nil
 }
 
+// Todoを削除するリクエストとレスポンス
+type DeleteTodoRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteTodoRequest) Reset() {
+	*x = DeleteTodoRequest{}
+	mi := &file_workspace_v1_todo_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteTodoRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteTodoRequest) ProtoMessage() {}
+
+func (x *DeleteTodoRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_workspace_v1_todo_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteTodoRequest.ProtoReflect.Descriptor instead.
+func (*DeleteTodoRequest) Descriptor() ([]byte, []int) {
+	return file_workspace_v1_todo_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *DeleteTodoRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+type DeleteTodoResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteTodoResponse) Reset() {
+	*x = DeleteTodoResponse{}
+	mi := &file_workspace_v1_todo_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteTodoResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteTodoResponse) ProtoMessage() {}
+
+func (x *DeleteTodoResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_workspace_v1_todo_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteTodoResponse.ProtoReflect.Descriptor instead.
+func (*DeleteTodoResponse) Descriptor() ([]byte, []int) {
+	return file_workspace_v1_todo_proto_rawDescGZIP(), []int{12}
+}
+
 var File_workspace_v1_todo_proto protoreflect.FileDescriptor
 
 const file_workspace_v1_todo_proto_rawDesc = "" +
@@ -628,7 +714,10 @@ const file_workspace_v1_todo_proto_rawDesc = "" +
 	"\x11UndoneTodoRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"<\n" +
 	"\x12UndoneTodoResponse\x12&\n" +
-	"\x04todo\x18\x01 \x01(\v2\x12.workspace.v1.TodoR\x04todo*X\n" +
+	"\x04todo\x18\x01 \x01(\v2\x12.workspace.v1.TodoR\x04todo\"#\n" +
+	"\x11DeleteTodoRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"\x14\n" +
+	"\x12DeleteTodoResponse*X\n" +
 	"\n" +
 	"TodoStatus\x12\x1b\n" +
 	"\x17TODO_STATUS_UNSPECIFIED\x10\x00\x12\x17\n" +
@@ -648,7 +737,7 @@ func file_workspace_v1_todo_proto_rawDescGZIP() []byte {
 }
 
 var file_workspace_v1_todo_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_workspace_v1_todo_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_workspace_v1_todo_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_workspace_v1_todo_proto_goTypes = []any{
 	(TodoStatus)(0),               // 0: workspace.v1.TodoStatus
 	(*Todo)(nil),                  // 1: workspace.v1.Todo
@@ -662,12 +751,14 @@ var file_workspace_v1_todo_proto_goTypes = []any{
 	(*DoTodoResponse)(nil),        // 9: workspace.v1.DoTodoResponse
 	(*UndoneTodoRequest)(nil),     // 10: workspace.v1.UndoneTodoRequest
 	(*UndoneTodoResponse)(nil),    // 11: workspace.v1.UndoneTodoResponse
-	(*timestamppb.Timestamp)(nil), // 12: google.protobuf.Timestamp
+	(*DeleteTodoRequest)(nil),     // 12: workspace.v1.DeleteTodoRequest
+	(*DeleteTodoResponse)(nil),    // 13: workspace.v1.DeleteTodoResponse
+	(*timestamppb.Timestamp)(nil), // 14: google.protobuf.Timestamp
 }
 var file_workspace_v1_todo_proto_depIdxs = []int32{
 	0,  // 0: workspace.v1.Todo.status:type_name -> workspace.v1.TodoStatus
-	12, // 1: workspace.v1.Todo.created_at:type_name -> google.protobuf.Timestamp
-	12, // 2: workspace.v1.Todo.updated_at:type_name -> google.protobuf.Timestamp
+	14, // 1: workspace.v1.Todo.created_at:type_name -> google.protobuf.Timestamp
+	14, // 2: workspace.v1.Todo.updated_at:type_name -> google.protobuf.Timestamp
 	1,  // 3: workspace.v1.CreateTodoResponse.todo:type_name -> workspace.v1.Todo
 	1,  // 4: workspace.v1.GetTodoResponse.todo:type_name -> workspace.v1.Todo
 	1,  // 5: workspace.v1.ListTodosResponse.todos:type_name -> workspace.v1.Todo
@@ -691,7 +782,7 @@ func file_workspace_v1_todo_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_workspace_v1_todo_proto_rawDesc), len(file_workspace_v1_todo_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   11,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

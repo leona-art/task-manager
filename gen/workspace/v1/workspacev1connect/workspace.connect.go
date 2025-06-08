@@ -47,6 +47,30 @@ const (
 	// WorkspaceServiceUndoneTodoProcedure is the fully-qualified name of the WorkspaceService's
 	// UndoneTodo RPC.
 	WorkspaceServiceUndoneTodoProcedure = "/workspace.v1.WorkspaceService/UndoneTodo"
+	// WorkspaceServiceDeleteTodoProcedure is the fully-qualified name of the WorkspaceService's
+	// DeleteTodo RPC.
+	WorkspaceServiceDeleteTodoProcedure = "/workspace.v1.WorkspaceService/DeleteTodo"
+	// WorkspaceServiceCreateProgressProcedure is the fully-qualified name of the WorkspaceService's
+	// CreateProgress RPC.
+	WorkspaceServiceCreateProgressProcedure = "/workspace.v1.WorkspaceService/CreateProgress"
+	// WorkspaceServiceGetProgressProcedure is the fully-qualified name of the WorkspaceService's
+	// GetProgress RPC.
+	WorkspaceServiceGetProgressProcedure = "/workspace.v1.WorkspaceService/GetProgress"
+	// WorkspaceServiceListProgressesProcedure is the fully-qualified name of the WorkspaceService's
+	// ListProgresses RPC.
+	WorkspaceServiceListProgressesProcedure = "/workspace.v1.WorkspaceService/ListProgresses"
+	// WorkspaceServiceSetProgressSolutionProcedure is the fully-qualified name of the
+	// WorkspaceService's SetProgressSolution RPC.
+	WorkspaceServiceSetProgressSolutionProcedure = "/workspace.v1.WorkspaceService/SetProgressSolution"
+	// WorkspaceServiceStartProgressProcedure is the fully-qualified name of the WorkspaceService's
+	// StartProgress RPC.
+	WorkspaceServiceStartProgressProcedure = "/workspace.v1.WorkspaceService/StartProgress"
+	// WorkspaceServiceCompleteProgressProcedure is the fully-qualified name of the WorkspaceService's
+	// CompleteProgress RPC.
+	WorkspaceServiceCompleteProgressProcedure = "/workspace.v1.WorkspaceService/CompleteProgress"
+	// WorkspaceServiceDeleteProgressProcedure is the fully-qualified name of the WorkspaceService's
+	// DeleteProgress RPC.
+	WorkspaceServiceDeleteProgressProcedure = "/workspace.v1.WorkspaceService/DeleteProgress"
 )
 
 // WorkspaceServiceClient is a client for the workspace.v1.WorkspaceService service.
@@ -56,6 +80,14 @@ type WorkspaceServiceClient interface {
 	ListTodos(context.Context, *connect.Request[v1.ListTodosRequest]) (*connect.Response[v1.ListTodosResponse], error)
 	DoTodo(context.Context, *connect.Request[v1.DoTodoRequest]) (*connect.Response[v1.DoTodoResponse], error)
 	UndoneTodo(context.Context, *connect.Request[v1.UndoneTodoRequest]) (*connect.Response[v1.UndoneTodoResponse], error)
+	DeleteTodo(context.Context, *connect.Request[v1.DeleteTodoRequest]) (*connect.Response[v1.DeleteTodoResponse], error)
+	CreateProgress(context.Context, *connect.Request[v1.CreateProgressRequest]) (*connect.Response[v1.CreateProgressResponse], error)
+	GetProgress(context.Context, *connect.Request[v1.GetProgressRequest]) (*connect.Response[v1.GetProgressResponse], error)
+	ListProgresses(context.Context, *connect.Request[v1.ListProgressesRequest]) (*connect.Response[v1.ListProgressesResponse], error)
+	SetProgressSolution(context.Context, *connect.Request[v1.SetProgressSolutionRequest]) (*connect.Response[v1.SetProgressSolutionResponse], error)
+	StartProgress(context.Context, *connect.Request[v1.StartProgressRequest]) (*connect.Response[v1.StartProgressResponse], error)
+	CompleteProgress(context.Context, *connect.Request[v1.CompleteProgressRequest]) (*connect.Response[v1.CompleteProgressResponse], error)
+	DeleteProgress(context.Context, *connect.Request[v1.DeleteProgressRequest]) (*connect.Response[v1.DeleteProgressResponse], error)
 }
 
 // NewWorkspaceServiceClient constructs a client for the workspace.v1.WorkspaceService service. By
@@ -99,16 +131,72 @@ func NewWorkspaceServiceClient(httpClient connect.HTTPClient, baseURL string, op
 			connect.WithSchema(workspaceServiceMethods.ByName("UndoneTodo")),
 			connect.WithClientOptions(opts...),
 		),
+		deleteTodo: connect.NewClient[v1.DeleteTodoRequest, v1.DeleteTodoResponse](
+			httpClient,
+			baseURL+WorkspaceServiceDeleteTodoProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("DeleteTodo")),
+			connect.WithClientOptions(opts...),
+		),
+		createProgress: connect.NewClient[v1.CreateProgressRequest, v1.CreateProgressResponse](
+			httpClient,
+			baseURL+WorkspaceServiceCreateProgressProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("CreateProgress")),
+			connect.WithClientOptions(opts...),
+		),
+		getProgress: connect.NewClient[v1.GetProgressRequest, v1.GetProgressResponse](
+			httpClient,
+			baseURL+WorkspaceServiceGetProgressProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("GetProgress")),
+			connect.WithClientOptions(opts...),
+		),
+		listProgresses: connect.NewClient[v1.ListProgressesRequest, v1.ListProgressesResponse](
+			httpClient,
+			baseURL+WorkspaceServiceListProgressesProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("ListProgresses")),
+			connect.WithClientOptions(opts...),
+		),
+		setProgressSolution: connect.NewClient[v1.SetProgressSolutionRequest, v1.SetProgressSolutionResponse](
+			httpClient,
+			baseURL+WorkspaceServiceSetProgressSolutionProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("SetProgressSolution")),
+			connect.WithClientOptions(opts...),
+		),
+		startProgress: connect.NewClient[v1.StartProgressRequest, v1.StartProgressResponse](
+			httpClient,
+			baseURL+WorkspaceServiceStartProgressProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("StartProgress")),
+			connect.WithClientOptions(opts...),
+		),
+		completeProgress: connect.NewClient[v1.CompleteProgressRequest, v1.CompleteProgressResponse](
+			httpClient,
+			baseURL+WorkspaceServiceCompleteProgressProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("CompleteProgress")),
+			connect.WithClientOptions(opts...),
+		),
+		deleteProgress: connect.NewClient[v1.DeleteProgressRequest, v1.DeleteProgressResponse](
+			httpClient,
+			baseURL+WorkspaceServiceDeleteProgressProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("DeleteProgress")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // workspaceServiceClient implements WorkspaceServiceClient.
 type workspaceServiceClient struct {
-	createTodo *connect.Client[v1.CreateTodoRequest, v1.CreateTodoResponse]
-	getTodo    *connect.Client[v1.GetTodoRequest, v1.GetTodoResponse]
-	listTodos  *connect.Client[v1.ListTodosRequest, v1.ListTodosResponse]
-	doTodo     *connect.Client[v1.DoTodoRequest, v1.DoTodoResponse]
-	undoneTodo *connect.Client[v1.UndoneTodoRequest, v1.UndoneTodoResponse]
+	createTodo          *connect.Client[v1.CreateTodoRequest, v1.CreateTodoResponse]
+	getTodo             *connect.Client[v1.GetTodoRequest, v1.GetTodoResponse]
+	listTodos           *connect.Client[v1.ListTodosRequest, v1.ListTodosResponse]
+	doTodo              *connect.Client[v1.DoTodoRequest, v1.DoTodoResponse]
+	undoneTodo          *connect.Client[v1.UndoneTodoRequest, v1.UndoneTodoResponse]
+	deleteTodo          *connect.Client[v1.DeleteTodoRequest, v1.DeleteTodoResponse]
+	createProgress      *connect.Client[v1.CreateProgressRequest, v1.CreateProgressResponse]
+	getProgress         *connect.Client[v1.GetProgressRequest, v1.GetProgressResponse]
+	listProgresses      *connect.Client[v1.ListProgressesRequest, v1.ListProgressesResponse]
+	setProgressSolution *connect.Client[v1.SetProgressSolutionRequest, v1.SetProgressSolutionResponse]
+	startProgress       *connect.Client[v1.StartProgressRequest, v1.StartProgressResponse]
+	completeProgress    *connect.Client[v1.CompleteProgressRequest, v1.CompleteProgressResponse]
+	deleteProgress      *connect.Client[v1.DeleteProgressRequest, v1.DeleteProgressResponse]
 }
 
 // CreateTodo calls workspace.v1.WorkspaceService.CreateTodo.
@@ -136,6 +224,46 @@ func (c *workspaceServiceClient) UndoneTodo(ctx context.Context, req *connect.Re
 	return c.undoneTodo.CallUnary(ctx, req)
 }
 
+// DeleteTodo calls workspace.v1.WorkspaceService.DeleteTodo.
+func (c *workspaceServiceClient) DeleteTodo(ctx context.Context, req *connect.Request[v1.DeleteTodoRequest]) (*connect.Response[v1.DeleteTodoResponse], error) {
+	return c.deleteTodo.CallUnary(ctx, req)
+}
+
+// CreateProgress calls workspace.v1.WorkspaceService.CreateProgress.
+func (c *workspaceServiceClient) CreateProgress(ctx context.Context, req *connect.Request[v1.CreateProgressRequest]) (*connect.Response[v1.CreateProgressResponse], error) {
+	return c.createProgress.CallUnary(ctx, req)
+}
+
+// GetProgress calls workspace.v1.WorkspaceService.GetProgress.
+func (c *workspaceServiceClient) GetProgress(ctx context.Context, req *connect.Request[v1.GetProgressRequest]) (*connect.Response[v1.GetProgressResponse], error) {
+	return c.getProgress.CallUnary(ctx, req)
+}
+
+// ListProgresses calls workspace.v1.WorkspaceService.ListProgresses.
+func (c *workspaceServiceClient) ListProgresses(ctx context.Context, req *connect.Request[v1.ListProgressesRequest]) (*connect.Response[v1.ListProgressesResponse], error) {
+	return c.listProgresses.CallUnary(ctx, req)
+}
+
+// SetProgressSolution calls workspace.v1.WorkspaceService.SetProgressSolution.
+func (c *workspaceServiceClient) SetProgressSolution(ctx context.Context, req *connect.Request[v1.SetProgressSolutionRequest]) (*connect.Response[v1.SetProgressSolutionResponse], error) {
+	return c.setProgressSolution.CallUnary(ctx, req)
+}
+
+// StartProgress calls workspace.v1.WorkspaceService.StartProgress.
+func (c *workspaceServiceClient) StartProgress(ctx context.Context, req *connect.Request[v1.StartProgressRequest]) (*connect.Response[v1.StartProgressResponse], error) {
+	return c.startProgress.CallUnary(ctx, req)
+}
+
+// CompleteProgress calls workspace.v1.WorkspaceService.CompleteProgress.
+func (c *workspaceServiceClient) CompleteProgress(ctx context.Context, req *connect.Request[v1.CompleteProgressRequest]) (*connect.Response[v1.CompleteProgressResponse], error) {
+	return c.completeProgress.CallUnary(ctx, req)
+}
+
+// DeleteProgress calls workspace.v1.WorkspaceService.DeleteProgress.
+func (c *workspaceServiceClient) DeleteProgress(ctx context.Context, req *connect.Request[v1.DeleteProgressRequest]) (*connect.Response[v1.DeleteProgressResponse], error) {
+	return c.deleteProgress.CallUnary(ctx, req)
+}
+
 // WorkspaceServiceHandler is an implementation of the workspace.v1.WorkspaceService service.
 type WorkspaceServiceHandler interface {
 	CreateTodo(context.Context, *connect.Request[v1.CreateTodoRequest]) (*connect.Response[v1.CreateTodoResponse], error)
@@ -143,6 +271,14 @@ type WorkspaceServiceHandler interface {
 	ListTodos(context.Context, *connect.Request[v1.ListTodosRequest]) (*connect.Response[v1.ListTodosResponse], error)
 	DoTodo(context.Context, *connect.Request[v1.DoTodoRequest]) (*connect.Response[v1.DoTodoResponse], error)
 	UndoneTodo(context.Context, *connect.Request[v1.UndoneTodoRequest]) (*connect.Response[v1.UndoneTodoResponse], error)
+	DeleteTodo(context.Context, *connect.Request[v1.DeleteTodoRequest]) (*connect.Response[v1.DeleteTodoResponse], error)
+	CreateProgress(context.Context, *connect.Request[v1.CreateProgressRequest]) (*connect.Response[v1.CreateProgressResponse], error)
+	GetProgress(context.Context, *connect.Request[v1.GetProgressRequest]) (*connect.Response[v1.GetProgressResponse], error)
+	ListProgresses(context.Context, *connect.Request[v1.ListProgressesRequest]) (*connect.Response[v1.ListProgressesResponse], error)
+	SetProgressSolution(context.Context, *connect.Request[v1.SetProgressSolutionRequest]) (*connect.Response[v1.SetProgressSolutionResponse], error)
+	StartProgress(context.Context, *connect.Request[v1.StartProgressRequest]) (*connect.Response[v1.StartProgressResponse], error)
+	CompleteProgress(context.Context, *connect.Request[v1.CompleteProgressRequest]) (*connect.Response[v1.CompleteProgressResponse], error)
+	DeleteProgress(context.Context, *connect.Request[v1.DeleteProgressRequest]) (*connect.Response[v1.DeleteProgressResponse], error)
 }
 
 // NewWorkspaceServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -182,6 +318,54 @@ func NewWorkspaceServiceHandler(svc WorkspaceServiceHandler, opts ...connect.Han
 		connect.WithSchema(workspaceServiceMethods.ByName("UndoneTodo")),
 		connect.WithHandlerOptions(opts...),
 	)
+	workspaceServiceDeleteTodoHandler := connect.NewUnaryHandler(
+		WorkspaceServiceDeleteTodoProcedure,
+		svc.DeleteTodo,
+		connect.WithSchema(workspaceServiceMethods.ByName("DeleteTodo")),
+		connect.WithHandlerOptions(opts...),
+	)
+	workspaceServiceCreateProgressHandler := connect.NewUnaryHandler(
+		WorkspaceServiceCreateProgressProcedure,
+		svc.CreateProgress,
+		connect.WithSchema(workspaceServiceMethods.ByName("CreateProgress")),
+		connect.WithHandlerOptions(opts...),
+	)
+	workspaceServiceGetProgressHandler := connect.NewUnaryHandler(
+		WorkspaceServiceGetProgressProcedure,
+		svc.GetProgress,
+		connect.WithSchema(workspaceServiceMethods.ByName("GetProgress")),
+		connect.WithHandlerOptions(opts...),
+	)
+	workspaceServiceListProgressesHandler := connect.NewUnaryHandler(
+		WorkspaceServiceListProgressesProcedure,
+		svc.ListProgresses,
+		connect.WithSchema(workspaceServiceMethods.ByName("ListProgresses")),
+		connect.WithHandlerOptions(opts...),
+	)
+	workspaceServiceSetProgressSolutionHandler := connect.NewUnaryHandler(
+		WorkspaceServiceSetProgressSolutionProcedure,
+		svc.SetProgressSolution,
+		connect.WithSchema(workspaceServiceMethods.ByName("SetProgressSolution")),
+		connect.WithHandlerOptions(opts...),
+	)
+	workspaceServiceStartProgressHandler := connect.NewUnaryHandler(
+		WorkspaceServiceStartProgressProcedure,
+		svc.StartProgress,
+		connect.WithSchema(workspaceServiceMethods.ByName("StartProgress")),
+		connect.WithHandlerOptions(opts...),
+	)
+	workspaceServiceCompleteProgressHandler := connect.NewUnaryHandler(
+		WorkspaceServiceCompleteProgressProcedure,
+		svc.CompleteProgress,
+		connect.WithSchema(workspaceServiceMethods.ByName("CompleteProgress")),
+		connect.WithHandlerOptions(opts...),
+	)
+	workspaceServiceDeleteProgressHandler := connect.NewUnaryHandler(
+		WorkspaceServiceDeleteProgressProcedure,
+		svc.DeleteProgress,
+		connect.WithSchema(workspaceServiceMethods.ByName("DeleteProgress")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/workspace.v1.WorkspaceService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case WorkspaceServiceCreateTodoProcedure:
@@ -194,6 +378,22 @@ func NewWorkspaceServiceHandler(svc WorkspaceServiceHandler, opts ...connect.Han
 			workspaceServiceDoTodoHandler.ServeHTTP(w, r)
 		case WorkspaceServiceUndoneTodoProcedure:
 			workspaceServiceUndoneTodoHandler.ServeHTTP(w, r)
+		case WorkspaceServiceDeleteTodoProcedure:
+			workspaceServiceDeleteTodoHandler.ServeHTTP(w, r)
+		case WorkspaceServiceCreateProgressProcedure:
+			workspaceServiceCreateProgressHandler.ServeHTTP(w, r)
+		case WorkspaceServiceGetProgressProcedure:
+			workspaceServiceGetProgressHandler.ServeHTTP(w, r)
+		case WorkspaceServiceListProgressesProcedure:
+			workspaceServiceListProgressesHandler.ServeHTTP(w, r)
+		case WorkspaceServiceSetProgressSolutionProcedure:
+			workspaceServiceSetProgressSolutionHandler.ServeHTTP(w, r)
+		case WorkspaceServiceStartProgressProcedure:
+			workspaceServiceStartProgressHandler.ServeHTTP(w, r)
+		case WorkspaceServiceCompleteProgressProcedure:
+			workspaceServiceCompleteProgressHandler.ServeHTTP(w, r)
+		case WorkspaceServiceDeleteProgressProcedure:
+			workspaceServiceDeleteProgressHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -221,4 +421,36 @@ func (UnimplementedWorkspaceServiceHandler) DoTodo(context.Context, *connect.Req
 
 func (UnimplementedWorkspaceServiceHandler) UndoneTodo(context.Context, *connect.Request[v1.UndoneTodoRequest]) (*connect.Response[v1.UndoneTodoResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("workspace.v1.WorkspaceService.UndoneTodo is not implemented"))
+}
+
+func (UnimplementedWorkspaceServiceHandler) DeleteTodo(context.Context, *connect.Request[v1.DeleteTodoRequest]) (*connect.Response[v1.DeleteTodoResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("workspace.v1.WorkspaceService.DeleteTodo is not implemented"))
+}
+
+func (UnimplementedWorkspaceServiceHandler) CreateProgress(context.Context, *connect.Request[v1.CreateProgressRequest]) (*connect.Response[v1.CreateProgressResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("workspace.v1.WorkspaceService.CreateProgress is not implemented"))
+}
+
+func (UnimplementedWorkspaceServiceHandler) GetProgress(context.Context, *connect.Request[v1.GetProgressRequest]) (*connect.Response[v1.GetProgressResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("workspace.v1.WorkspaceService.GetProgress is not implemented"))
+}
+
+func (UnimplementedWorkspaceServiceHandler) ListProgresses(context.Context, *connect.Request[v1.ListProgressesRequest]) (*connect.Response[v1.ListProgressesResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("workspace.v1.WorkspaceService.ListProgresses is not implemented"))
+}
+
+func (UnimplementedWorkspaceServiceHandler) SetProgressSolution(context.Context, *connect.Request[v1.SetProgressSolutionRequest]) (*connect.Response[v1.SetProgressSolutionResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("workspace.v1.WorkspaceService.SetProgressSolution is not implemented"))
+}
+
+func (UnimplementedWorkspaceServiceHandler) StartProgress(context.Context, *connect.Request[v1.StartProgressRequest]) (*connect.Response[v1.StartProgressResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("workspace.v1.WorkspaceService.StartProgress is not implemented"))
+}
+
+func (UnimplementedWorkspaceServiceHandler) CompleteProgress(context.Context, *connect.Request[v1.CompleteProgressRequest]) (*connect.Response[v1.CompleteProgressResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("workspace.v1.WorkspaceService.CompleteProgress is not implemented"))
+}
+
+func (UnimplementedWorkspaceServiceHandler) DeleteProgress(context.Context, *connect.Request[v1.DeleteProgressRequest]) (*connect.Response[v1.DeleteProgressResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("workspace.v1.WorkspaceService.DeleteProgress is not implemented"))
 }

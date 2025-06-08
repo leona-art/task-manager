@@ -16,27 +16,27 @@ func NewProgressUseCase(repository gateway.ProgressRepository) *ProgressUseCase 
 	}
 }
 
-func (uc *ProgressUseCase) CreateProgress(title, description string) error {
+func (uc *ProgressUseCase) CreateProgress(title, description string) (*progress.ProgressTask, error) {
 	progressTask, err := progress.NewProgressTask(title, description)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if err := uc.repository.Create(*progressTask); err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return progressTask, nil
 }
 
-func (uc *ProgressUseCase) GetProgressByID(id string) (progress.ProgressTask, bool, error) {
+func (uc *ProgressUseCase) GetProgressByID(id string) (*progress.ProgressTask, bool, error) {
 	taskId, err := task.NewTaskIdFromString(id)
 	if err != nil {
-		return progress.ProgressTask{}, false, err
+		return nil, false, err
 	}
 	progressTask, ok, err := uc.repository.Get(taskId)
 	if err != nil {
-		return progress.ProgressTask{}, false, err
+		return nil, false, err
 	}
-	return progressTask, ok, nil
+	return &progressTask, ok, nil
 }
 
 func (uc *ProgressUseCase) ListProgress() ([]progress.ProgressTask, error) {
@@ -47,42 +47,42 @@ func (uc *ProgressUseCase) ListProgress() ([]progress.ProgressTask, error) {
 	return progressTasks, nil
 }
 
-func (uc *ProgressUseCase) StartProgress(id string) (progress.ProgressTask, error) {
+func (uc *ProgressUseCase) StartProgress(id string) (*progress.ProgressTask, error) {
 	taskId, err := task.NewTaskIdFromString(id)
 	if err != nil {
-		return progress.ProgressTask{}, err
+		return nil, err
 	}
 	progressTask, ok, err := uc.repository.Get(taskId)
 	if err != nil {
-		return progress.ProgressTask{}, err
+		return nil, err
 	}
 	if !ok {
-		return progress.ProgressTask{}, nil // Task not found
+		return nil, nil // Task not found
 	}
 	progressTask.Start()
 	if err := uc.repository.Save(progressTask); err != nil {
-		return progress.ProgressTask{}, err
+		return nil, err
 	}
-	return progressTask, nil
+	return &progressTask, nil
 }
 
-func (uc *ProgressUseCase) CompleteProgress(id string) (progress.ProgressTask, error) {
+func (uc *ProgressUseCase) CompleteProgress(id string) (*progress.ProgressTask, error) {
 	taskId, err := task.NewTaskIdFromString(id)
 	if err != nil {
-		return progress.ProgressTask{}, err
+		return nil, err
 	}
 	progressTask, ok, err := uc.repository.Get(taskId)
 	if err != nil {
-		return progress.ProgressTask{}, err
+		return nil, err
 	}
 	if !ok {
-		return progress.ProgressTask{}, nil // Task not found
+		return nil, nil // Task not found
 	}
 	progressTask.Complete()
 	if err := uc.repository.Save(progressTask); err != nil {
-		return progress.ProgressTask{}, err
+		return nil, err
 	}
-	return progressTask, nil
+	return &progressTask, nil
 }
 
 func (uc *ProgressUseCase) DeleteProgress(id string) (bool, error) {
@@ -97,21 +97,21 @@ func (uc *ProgressUseCase) DeleteProgress(id string) (bool, error) {
 	return ok, nil
 }
 
-func (uc *ProgressUseCase) SetSolution(id string, solution string) (progress.ProgressTask, error) {
+func (uc *ProgressUseCase) SetSolution(id string, solution string) (*progress.ProgressTask, error) {
 	taskId, err := task.NewTaskIdFromString(id)
 	if err != nil {
-		return progress.ProgressTask{}, err
+		return nil, err
 	}
 	progressTask, ok, err := uc.repository.Get(taskId)
 	if err != nil {
-		return progress.ProgressTask{}, err
+		return nil, err
 	}
 	if !ok {
-		return progress.ProgressTask{}, nil // Task not found
+		return nil, nil // Task not found
 	}
 	progressTask.SetSolution(solution)
 	if err := uc.repository.Save(progressTask); err != nil {
-		return progress.ProgressTask{}, err
+		return nil, err
 	}
-	return progressTask, nil
+	return &progressTask, nil
 }

@@ -24,7 +24,7 @@ var File_workspace_v1_workspace_proto protoreflect.FileDescriptor
 
 const file_workspace_v1_workspace_proto_rawDesc = "" +
 	"\n" +
-	"\x1cworkspace/v1/workspace.proto\x12\fworkspace.v1\x1a\x17workspace/v1/todo.proto2\x8f\x03\n" +
+	"\x1cworkspace/v1/workspace.proto\x12\fworkspace.v1\x1a\x17workspace/v1/todo.proto\x1a\x1bworkspace/v1/progress.proto2\xf4\b\n" +
 	"\x10WorkspaceService\x12O\n" +
 	"\n" +
 	"CreateTodo\x12\x1f.workspace.v1.CreateTodoRequest\x1a .workspace.v1.CreateTodoResponse\x12F\n" +
@@ -32,36 +32,77 @@ const file_workspace_v1_workspace_proto_rawDesc = "" +
 	"\tListTodos\x12\x1e.workspace.v1.ListTodosRequest\x1a\x1f.workspace.v1.ListTodosResponse\x12C\n" +
 	"\x06DoTodo\x12\x1b.workspace.v1.DoTodoRequest\x1a\x1c.workspace.v1.DoTodoResponse\x12O\n" +
 	"\n" +
-	"UndoneTodo\x12\x1f.workspace.v1.UndoneTodoRequest\x1a .workspace.v1.UndoneTodoResponseB@Z>github.com/leona-art/task-manager/gen/workspace/v1;workspacev1b\x06proto3"
+	"UndoneTodo\x12\x1f.workspace.v1.UndoneTodoRequest\x1a .workspace.v1.UndoneTodoResponse\x12O\n" +
+	"\n" +
+	"DeleteTodo\x12\x1f.workspace.v1.DeleteTodoRequest\x1a .workspace.v1.DeleteTodoResponse\x12[\n" +
+	"\x0eCreateProgress\x12#.workspace.v1.CreateProgressRequest\x1a$.workspace.v1.CreateProgressResponse\x12R\n" +
+	"\vGetProgress\x12 .workspace.v1.GetProgressRequest\x1a!.workspace.v1.GetProgressResponse\x12[\n" +
+	"\x0eListProgresses\x12#.workspace.v1.ListProgressesRequest\x1a$.workspace.v1.ListProgressesResponse\x12j\n" +
+	"\x13SetProgressSolution\x12(.workspace.v1.SetProgressSolutionRequest\x1a).workspace.v1.SetProgressSolutionResponse\x12X\n" +
+	"\rStartProgress\x12\".workspace.v1.StartProgressRequest\x1a#.workspace.v1.StartProgressResponse\x12a\n" +
+	"\x10CompleteProgress\x12%.workspace.v1.CompleteProgressRequest\x1a&.workspace.v1.CompleteProgressResponse\x12[\n" +
+	"\x0eDeleteProgress\x12#.workspace.v1.DeleteProgressRequest\x1a$.workspace.v1.DeleteProgressResponseB@Z>github.com/leona-art/task-manager/gen/workspace/v1;workspacev1b\x06proto3"
 
 var file_workspace_v1_workspace_proto_goTypes = []any{
-	(*CreateTodoRequest)(nil),  // 0: workspace.v1.CreateTodoRequest
-	(*GetTodoRequest)(nil),     // 1: workspace.v1.GetTodoRequest
-	(*ListTodosRequest)(nil),   // 2: workspace.v1.ListTodosRequest
-	(*DoTodoRequest)(nil),      // 3: workspace.v1.DoTodoRequest
-	(*UndoneTodoRequest)(nil),  // 4: workspace.v1.UndoneTodoRequest
-	(*CreateTodoResponse)(nil), // 5: workspace.v1.CreateTodoResponse
-	(*GetTodoResponse)(nil),    // 6: workspace.v1.GetTodoResponse
-	(*ListTodosResponse)(nil),  // 7: workspace.v1.ListTodosResponse
-	(*DoTodoResponse)(nil),     // 8: workspace.v1.DoTodoResponse
-	(*UndoneTodoResponse)(nil), // 9: workspace.v1.UndoneTodoResponse
+	(*CreateTodoRequest)(nil),           // 0: workspace.v1.CreateTodoRequest
+	(*GetTodoRequest)(nil),              // 1: workspace.v1.GetTodoRequest
+	(*ListTodosRequest)(nil),            // 2: workspace.v1.ListTodosRequest
+	(*DoTodoRequest)(nil),               // 3: workspace.v1.DoTodoRequest
+	(*UndoneTodoRequest)(nil),           // 4: workspace.v1.UndoneTodoRequest
+	(*DeleteTodoRequest)(nil),           // 5: workspace.v1.DeleteTodoRequest
+	(*CreateProgressRequest)(nil),       // 6: workspace.v1.CreateProgressRequest
+	(*GetProgressRequest)(nil),          // 7: workspace.v1.GetProgressRequest
+	(*ListProgressesRequest)(nil),       // 8: workspace.v1.ListProgressesRequest
+	(*SetProgressSolutionRequest)(nil),  // 9: workspace.v1.SetProgressSolutionRequest
+	(*StartProgressRequest)(nil),        // 10: workspace.v1.StartProgressRequest
+	(*CompleteProgressRequest)(nil),     // 11: workspace.v1.CompleteProgressRequest
+	(*DeleteProgressRequest)(nil),       // 12: workspace.v1.DeleteProgressRequest
+	(*CreateTodoResponse)(nil),          // 13: workspace.v1.CreateTodoResponse
+	(*GetTodoResponse)(nil),             // 14: workspace.v1.GetTodoResponse
+	(*ListTodosResponse)(nil),           // 15: workspace.v1.ListTodosResponse
+	(*DoTodoResponse)(nil),              // 16: workspace.v1.DoTodoResponse
+	(*UndoneTodoResponse)(nil),          // 17: workspace.v1.UndoneTodoResponse
+	(*DeleteTodoResponse)(nil),          // 18: workspace.v1.DeleteTodoResponse
+	(*CreateProgressResponse)(nil),      // 19: workspace.v1.CreateProgressResponse
+	(*GetProgressResponse)(nil),         // 20: workspace.v1.GetProgressResponse
+	(*ListProgressesResponse)(nil),      // 21: workspace.v1.ListProgressesResponse
+	(*SetProgressSolutionResponse)(nil), // 22: workspace.v1.SetProgressSolutionResponse
+	(*StartProgressResponse)(nil),       // 23: workspace.v1.StartProgressResponse
+	(*CompleteProgressResponse)(nil),    // 24: workspace.v1.CompleteProgressResponse
+	(*DeleteProgressResponse)(nil),      // 25: workspace.v1.DeleteProgressResponse
 }
 var file_workspace_v1_workspace_proto_depIdxs = []int32{
-	0, // 0: workspace.v1.WorkspaceService.CreateTodo:input_type -> workspace.v1.CreateTodoRequest
-	1, // 1: workspace.v1.WorkspaceService.GetTodo:input_type -> workspace.v1.GetTodoRequest
-	2, // 2: workspace.v1.WorkspaceService.ListTodos:input_type -> workspace.v1.ListTodosRequest
-	3, // 3: workspace.v1.WorkspaceService.DoTodo:input_type -> workspace.v1.DoTodoRequest
-	4, // 4: workspace.v1.WorkspaceService.UndoneTodo:input_type -> workspace.v1.UndoneTodoRequest
-	5, // 5: workspace.v1.WorkspaceService.CreateTodo:output_type -> workspace.v1.CreateTodoResponse
-	6, // 6: workspace.v1.WorkspaceService.GetTodo:output_type -> workspace.v1.GetTodoResponse
-	7, // 7: workspace.v1.WorkspaceService.ListTodos:output_type -> workspace.v1.ListTodosResponse
-	8, // 8: workspace.v1.WorkspaceService.DoTodo:output_type -> workspace.v1.DoTodoResponse
-	9, // 9: workspace.v1.WorkspaceService.UndoneTodo:output_type -> workspace.v1.UndoneTodoResponse
-	5, // [5:10] is the sub-list for method output_type
-	0, // [0:5] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	0,  // 0: workspace.v1.WorkspaceService.CreateTodo:input_type -> workspace.v1.CreateTodoRequest
+	1,  // 1: workspace.v1.WorkspaceService.GetTodo:input_type -> workspace.v1.GetTodoRequest
+	2,  // 2: workspace.v1.WorkspaceService.ListTodos:input_type -> workspace.v1.ListTodosRequest
+	3,  // 3: workspace.v1.WorkspaceService.DoTodo:input_type -> workspace.v1.DoTodoRequest
+	4,  // 4: workspace.v1.WorkspaceService.UndoneTodo:input_type -> workspace.v1.UndoneTodoRequest
+	5,  // 5: workspace.v1.WorkspaceService.DeleteTodo:input_type -> workspace.v1.DeleteTodoRequest
+	6,  // 6: workspace.v1.WorkspaceService.CreateProgress:input_type -> workspace.v1.CreateProgressRequest
+	7,  // 7: workspace.v1.WorkspaceService.GetProgress:input_type -> workspace.v1.GetProgressRequest
+	8,  // 8: workspace.v1.WorkspaceService.ListProgresses:input_type -> workspace.v1.ListProgressesRequest
+	9,  // 9: workspace.v1.WorkspaceService.SetProgressSolution:input_type -> workspace.v1.SetProgressSolutionRequest
+	10, // 10: workspace.v1.WorkspaceService.StartProgress:input_type -> workspace.v1.StartProgressRequest
+	11, // 11: workspace.v1.WorkspaceService.CompleteProgress:input_type -> workspace.v1.CompleteProgressRequest
+	12, // 12: workspace.v1.WorkspaceService.DeleteProgress:input_type -> workspace.v1.DeleteProgressRequest
+	13, // 13: workspace.v1.WorkspaceService.CreateTodo:output_type -> workspace.v1.CreateTodoResponse
+	14, // 14: workspace.v1.WorkspaceService.GetTodo:output_type -> workspace.v1.GetTodoResponse
+	15, // 15: workspace.v1.WorkspaceService.ListTodos:output_type -> workspace.v1.ListTodosResponse
+	16, // 16: workspace.v1.WorkspaceService.DoTodo:output_type -> workspace.v1.DoTodoResponse
+	17, // 17: workspace.v1.WorkspaceService.UndoneTodo:output_type -> workspace.v1.UndoneTodoResponse
+	18, // 18: workspace.v1.WorkspaceService.DeleteTodo:output_type -> workspace.v1.DeleteTodoResponse
+	19, // 19: workspace.v1.WorkspaceService.CreateProgress:output_type -> workspace.v1.CreateProgressResponse
+	20, // 20: workspace.v1.WorkspaceService.GetProgress:output_type -> workspace.v1.GetProgressResponse
+	21, // 21: workspace.v1.WorkspaceService.ListProgresses:output_type -> workspace.v1.ListProgressesResponse
+	22, // 22: workspace.v1.WorkspaceService.SetProgressSolution:output_type -> workspace.v1.SetProgressSolutionResponse
+	23, // 23: workspace.v1.WorkspaceService.StartProgress:output_type -> workspace.v1.StartProgressResponse
+	24, // 24: workspace.v1.WorkspaceService.CompleteProgress:output_type -> workspace.v1.CompleteProgressResponse
+	25, // 25: workspace.v1.WorkspaceService.DeleteProgress:output_type -> workspace.v1.DeleteProgressResponse
+	13, // [13:26] is the sub-list for method output_type
+	0,  // [0:13] is the sub-list for method input_type
+	0,  // [0:0] is the sub-list for extension type_name
+	0,  // [0:0] is the sub-list for extension extendee
+	0,  // [0:0] is the sub-list for field type_name
 }
 
 func init() { file_workspace_v1_workspace_proto_init() }
@@ -70,6 +111,7 @@ func file_workspace_v1_workspace_proto_init() {
 		return
 	}
 	file_workspace_v1_todo_proto_init()
+	file_workspace_v1_progress_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

@@ -19,6 +19,13 @@ func (s Option[T]) Get() (value T, ok bool) {
 	return s.value, true
 }
 
+func (s Option[T]) Unwrap() T {
+	if s.none {
+		panic("called `Option.Unwrap()` on a `None` value")
+	}
+	return s.value
+}
+
 func Some[T any](value T) Option[T] {
 	return Option[T]{value: value, none: false}
 }
