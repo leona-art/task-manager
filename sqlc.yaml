@@ -1,0 +1,15 @@
+version: "2"
+sql:
+  - engine: "mysql"
+    schema: "schema.sql"
+    queries: 
+      - "queries/task.sql"
+      - "queries/todo.sql"
+      - "queries/progress.sql"
+      - "queries/issue.sql"
+    gen:
+      go:
+        package: "sqlc"
+        sql_package: "database/sql"
+        sql_driver: "github.com/go-sql-driver/mysql"
+        out: "gen/infra/sqlc"

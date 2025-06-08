@@ -5,6 +5,7 @@ package workspace.v1;
 option go_package = "github.com/leona-art/task-manager/gen/workspace/v1;workspacev1";
 
 import "workspace/v1/todo.proto";
+import "workspace/v1/task.proto";
 
 service WorkspaceService {
     rpc CreateTodo (CreateTodoRequest) returns (CreateTodoResponse);

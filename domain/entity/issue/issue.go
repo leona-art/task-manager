@@ -18,6 +18,17 @@ func (i *IssueTask) Kind() task.TaskKind {
 	return task.TaskKindIssue
 }
 
+func NewIssueTask(title, description string) (*IssueTask, error) {
+	data, err := task.NewTaskEntity(title, description)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create task entity: %w", err)
+	}
+	return &IssueTask{
+		info:  data,
+		state: NewOpenState(),
+	}, nil
+}
+
 func (i *IssueTask) Investigate() error {
 	if next, ok := i.state.Candidates()[Investigating]; ok {
 		i.state = next()

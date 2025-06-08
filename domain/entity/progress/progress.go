@@ -11,6 +11,17 @@ type ProgressTask struct {
 	state ProgressState
 }
 
+func NewProgressTask(title, description string) (*ProgressTask, error) {
+	data, err := task.NewTaskEntity(title, description)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create task entity: %w", err)
+	}
+	return &ProgressTask{
+		info:  data,
+		state: NewNotStartedState(),
+	}, nil
+}
+
 func (p *ProgressTask) Info() task.TaskEntity {
 	return p.info
 }

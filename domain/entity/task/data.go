@@ -34,3 +34,7 @@ func (t *TaskEntity) Set(title, description string) {
 func (t *TaskEntity) Update() {
 	t.UpdatedAt = time.Now()
 }
+
+func (t *TaskEntity) IsEmpty() bool {
+	return t.ID.IsEmpty() && t.Title == "" && t.Description == "" && t.CreatedAt.IsZero() && t.UpdatedAt.IsZero()
+}

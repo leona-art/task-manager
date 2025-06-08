@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/leona-art/task-manager/domain/entity/task"
@@ -17,21 +18,25 @@ func NewTodoUseCase(repository todo.TodoRepository) *TodoUseCase {
 	}
 }
 
-func (uc *TodoUseCase) CreateTodo(title, description string) (todo.TodoTask, error) {
+func (uc *TodoUseCase) CreateTodo(ctx context.Context, title, description string) (todo.TodoTask, error) {
 	taskEntity, err := task.NewTaskEntity(title, description)
 	if err != nil {
 		return todo.TodoTask{}, err
 	}
 	todoTask := todo.NewTodoTask(taskEntity)
 
-	if err := uc.repository.Save(todoTask); err != nil {
+	if err := uc.repository.Create(ctx, todoTask); err != nil {
 		return todo.TodoTask{}, err
 	}
 	return todoTask, nil
 }
 
-func (uc *TodoUseCase) GetTodoByID(id task.TaskId) (todo.TodoTask, bool, error) {
-	t, ok, err := uc.repository.Get(id)
+func (uc *TodoUseCase) GetTodoByID(ctx context.Context, id string) (todo.TodoTask, bool, error) {
+	taskId, err := task.NewTaskIdFromString(id)
+	if err != nil {
+		return todo.TodoTask{}, false, err
+	}
+	t, ok, err := uc.repository.Get(ctx, taskId)
 	if err != nil {
 		return todo.TodoTask{}, false, err
 	}
@@ -41,31 +46,39 @@ func (uc *TodoUseCase) GetTodoByID(id task.TaskId) (todo.TodoTask, bool, error) 
 	return t, true, nil
 }
 
-func (uc *TodoUseCase) UpdateTodo(t todo.TodoTask) error {
-	if err := uc.repository.Save(t); err != nil {
+func (uc *TodoUseCase) UpdateTodo(ctx context.Context, t todo.TodoTask) error {
+	if err := uc.repository.Save(ctx, t); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (uc *TodoUseCase) DeleteTodo(id task.TaskId) (bool, error) {
-	ok, err := uc.repository.Delete(id)
+func (uc *TodoUseCase) DeleteTodo(ctx context.Context, id string) (bool, error) {
+	taskId, err := task.NewTaskIdFromString(id)
+	if err != nil {
+		return false, err
+	}
+	ok, err := uc.repository.Delete(ctx, taskId)
 	if err != nil {
 		return false, err
 	}
 	return ok, nil
 }
 
-func (uc *TodoUseCase) ListTodos() ([]todo.TodoTask, error) {
-	todos, err := uc.repository.List()
+func (uc *TodoUseCase) ListTodos(ctx context.Context) ([]todo.TodoTask, error) {
+	todos, err := uc.repository.List(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return todos, nil
 }
 
-func (uc *TodoUseCase) MarkAsDoneTodo(id task.TaskId) (todo.TodoTask, error) {
-	t, ok, err := uc.GetTodoByID(id)
+func (uc *TodoUseCase) MarkAsDoneTodo(ctx context.Context, id string) (todo.TodoTask, error) {
+	taskId, err := task.NewTaskIdFromString(id)
+	if err != nil {
+		return todo.TodoTask{}, err
+	}
+	t, ok, err := uc.repository.Get(ctx, taskId)
 	if err != nil {
 		return todo.TodoTask{}, err
 	}
@@ -75,14 +88,19 @@ func (uc *TodoUseCase) MarkAsDoneTodo(id task.TaskId) (todo.TodoTask, error) {
 	if err := t.MarkAsDone(); err != nil {
 		return todo.TodoTask{}, err
 	}
-	if err := uc.repository.Save(t); err != nil {
+	if err := uc.repository.Save(ctx, t); err != nil {
 		return todo.TodoTask{}, err
 	}
 	return t, nil
 }
 
-func (uc *TodoUseCase) RevertTodo(id task.TaskId) (todo.TodoTask, error) {
-	t, ok, err := uc.GetTodoByID(id)
+func (uc *TodoUseCase) RevertTodo(ctx context.Context, id string) (todo.TodoTask, error) {
+	taskId, err := task.NewTaskIdFromString(id)
+	if err != nil {
+		return todo.TodoTask{}, err
+	}
+
+	t, ok, err := uc.repository.Get(ctx, taskId)
 	if err != nil {
 		return todo.TodoTask{}, err
 	}
@@ -92,7 +110,7 @@ func (uc *TodoUseCase) RevertTodo(id task.TaskId) (todo.TodoTask, error) {
 	if err := t.Revert(); err != nil {
 		return todo.TodoTask{}, err
 	}
-	if err := uc.repository.Save(t); err != nil {
+	if err := uc.repository.Save(ctx, t); err != nil {
 		return todo.TodoTask{}, err
 	}
 	return t, nil
