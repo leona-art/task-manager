@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"fmt"
+	"log/slog"
 
 	"github.com/leona-art/task-manager/adaptor/gateway"
 	"github.com/leona-art/task-manager/domain/entity/task"
@@ -69,6 +70,7 @@ func (uc *TodoUseCase) DeleteTodo(ctx context.Context, id string) (bool, error) 
 func (uc *TodoUseCase) ListTodos(ctx context.Context) ([]todo.TodoTask, error) {
 	todos, err := uc.repository.List(ctx)
 	if err != nil {
+		slog.Error("failed to list todos", "error", err)
 		return nil, err
 	}
 	return todos, nil

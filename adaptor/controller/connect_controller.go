@@ -32,6 +32,7 @@ func (w *WorkSpaceController) CreateTodo(ctx context.Context, req *connect.Reque
 
 // DoTodo implements workspacev1connect.WorkspaceServiceHandler.
 func (w *WorkSpaceController) DoTodo(ctx context.Context, req *connect.Request[workspacev1.DoTodoRequest]) (*connect.Response[workspacev1.DoTodoResponse], error) {
+	slog.Info("DoTodo called", "id", req.Msg.Id)
 	t, err := w.TodoUsecase.MarkAsDoneTodo(ctx, req.Msg.Id)
 	if err != nil {
 		return nil, connect.NewError(connect.CodeInternal, fmt.Errorf("failed to do todo: %w", err))

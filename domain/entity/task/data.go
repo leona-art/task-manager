@@ -43,6 +43,5 @@ func (t *TaskEntity) IsValid() bool {
 	return !t.ID.IsEmpty() &&
 		t.Title != "" &&
 		!t.CreatedAt.IsZero() &&
-		!t.UpdatedAt.IsZero() &&
-		t.UpdatedAt.After(t.CreatedAt)
+		!t.UpdatedAt.IsZero()
 }

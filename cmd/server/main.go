@@ -7,7 +7,7 @@ import (
 
 	"github.com/leona-art/task-manager/adaptor/controller"
 	"github.com/leona-art/task-manager/gen/workspace/v1/workspacev1connect"
-	"github.com/leona-art/task-manager/infra/mysql_repository"
+	"github.com/leona-art/task-manager/infra/persistence"
 	"github.com/leona-art/task-manager/usecase"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
@@ -25,7 +25,7 @@ func main() {
 	}
 	defer db.Close()
 
-	todoRepository := mysql_repository.NewMySqlTodoRepository(db)
+	todoRepository := persistence.NewMySqlTodoRepository(db)
 	todoUsecase := usecase.NewTodoUseCase(todoRepository)
 	workspace := &controller.WorkSpaceController{
 		TodoUsecase: todoUsecase,
